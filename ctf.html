@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CTF // break it — Tsolmondorj Natsagdorj</title>
+<meta name="description" content="Don't trust — verify. Interactive smart-contract security challenges drawn from real bug classes. Break them in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080a;--bg-1:#0d0e12;--bg-2:#121419;--bg-3:#181b22;
+  --line:#211f1c;--line-1:#37322c;
+  --ink:#ece5db;--dim:#a79c8d;--faint:#8a8174;
+  --amber:#ff9d4d;--amber2:#ffc081;--amber-d:rgba(255,157,77,.10);--amber-b:rgba(255,157,77,.42);
+  --teal:#67d4c8;--teal-b:rgba(103,212,200,.4);
+  --warn:#e8c45a;--warn-d:rgba(232,196,90,.1);
+  --green:#6ee7a8;--red:#f0937d;
+  --mono:'JetBrains Mono',ui-monospace,monospace;--hud:'Rajdhani',var(--mono);--display:'Orbitron',var(--hud);--sans:'Inter',system-ui,sans-serif;--maxw:1000px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}.mono{font-family:var(--mono)}.hud{font-family:var(--hud)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.fx{position:fixed;inset:0;pointer-events:none;z-index:90}
+.fx-scan{background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.13) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;opacity:.4}
+.fx-grain{opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .5s steps(2) infinite}
+@keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-4%,3%)}100%{transform:translate(3%,-2%)}}
+.fx-vig{background:radial-gradient(ellipse 130% 115% at 50% 30%,transparent 55%,rgba(0,0,0,.55) 100%)}
+.frame{position:fixed;z-index:91;width:22px;height:22px;border:1px solid var(--amber-b);pointer-events:none;opacity:.5}
+.frame.tl{top:13px;left:13px;border-right:0;border-bottom:0}.frame.tr{top:13px;right:13px;border-left:0;border-bottom:0}
+.frame.bl{bottom:13px;left:13px;border-right:0;border-top:0}.frame.br{bottom:13px;right:13px;border-left:0;border-top:0}
+@media(prefers-reduced-motion:reduce){.fx-grain,.blink{animation:none!important}}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;backdrop-filter:blur(9px);background:linear-gradient(180deg,rgba(8,8,10,.82),rgba(8,8,10,.2));border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;max-width:var(--maxw)}
+.nav .brand{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.nav .brand b{color:var(--amber)}
+.nav .links{display:flex;gap:20px;font-family:var(--hud);font-size:13.5px;letter-spacing:.05em;color:var(--dim);text-transform:uppercase}
+.nav .links a:hover{color:var(--amber)}
+
+.head{padding:120px 0 30px;position:relative;overflow:hidden}
+.head::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse 70% 60% at 30% 0%,rgba(255,157,77,.12),transparent 60%)}
+.kicker{font-family:var(--hud);font-size:14px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--amber2);margin-bottom:18px;display:flex;align-items:center;gap:11px}
+.kicker .blink{width:8px;height:8px;background:var(--amber);box-shadow:0 0 12px var(--amber);animation:bk 1.3s steps(1) infinite}
+@keyframes bk{50%{opacity:.2}}
+.head h1{font-family:var(--display);font-size:clamp(2rem,6vw,3.6rem);font-weight:800;letter-spacing:.01em;text-transform:uppercase;line-height:1.05}
+.head .lede{color:var(--dim);max-width:62ch;margin-top:20px;font-size:16px}
+.head .lede b{color:var(--ink)}
+.scoreline{margin-top:26px;display:flex;gap:22px;font-family:var(--mono);font-size:12.5px;color:var(--faint);flex-wrap:wrap;align-items:center}
+.scoreline b{color:var(--amber)}
+.scoreline .reset{color:var(--faint);border:1px solid var(--line-1);padding:3px 8px;cursor:pointer;background:transparent;font-family:var(--mono);font-size:11px}
+.scoreline .reset:hover{color:var(--red);border-color:var(--red)}
+
+.ladder{padding:34px 0 90px;display:flex;flex-direction:column;gap:16px}
+.chal{border:1px solid var(--line);background:linear-gradient(180deg,var(--bg-1),var(--bg));border-radius:3px;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.chal.solved{border-color:var(--green)}
+.chal.locked{opacity:.6}
+.chal.locked .chal-h{cursor:not-allowed}
+.chal.locked .chev{opacity:.3}
+a:focus-visible,button:focus-visible,input:focus-visible,[role=button]:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.chal-h{display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;user-select:none}
+.chal-h .idx{font-family:var(--mono);font-size:12px;color:var(--faint)}
+.chal-h .ttl{font-family:var(--sans);font-weight:800;font-size:1.15rem;letter-spacing:-.01em;flex:1}
+.chal-h .diff{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--line-1);color:var(--dim)}
+.chal-h .badge{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border:1px solid}
+.badge.unsolved{color:var(--amber);border-color:var(--amber-b);background:var(--amber-d)}
+.badge.solved{color:var(--green);border-color:var(--green)}
+.badge.locked{color:var(--faint);border-color:var(--line-1)}
+.chal-h .chev{color:var(--faint);transition:transform .2s}
+.chal.open .chev{transform:rotate(90deg)}
+.chal-body{display:none;padding:0 22px 24px;border-top:1px solid var(--line)}
+.chal.open .chal-body{display:block}
+.brief{color:var(--dim);font-size:14.5px;margin:18px 0;max-width:74ch}.brief b{color:var(--ink)}
+.goal{font-family:var(--mono);font-size:12.5px;color:var(--amber2);background:var(--amber-d);border-left:2px solid var(--amber);padding:10px 14px;margin-bottom:18px}
+pre.code{font-family:var(--mono);font-size:12.5px;line-height:1.6;color:#cdd6e0;background:#0a0c10;border:1px solid var(--line);border-radius:3px;padding:16px 18px;overflow-x:auto;margin-bottom:18px}
+pre.code .k{color:#ff9d4d}pre.code .c{color:#7c8694;font-style:italic}pre.code .s{color:#67d4c8}pre.code .v{color:#e8c45a}pre.code .bug{background:rgba(240,147,125,.14);border-bottom:1px dashed var(--red)}
+
+.console{background:#070809;border:1px solid var(--line-1);border-radius:3px;font-family:var(--mono);font-size:12.5px}
+.console-bar{display:flex;align-items:center;gap:7px;padding:8px 12px;border-bottom:1px solid var(--line);color:var(--faint);font-size:11px;letter-spacing:.08em}
+.console-bar .d{width:9px;height:9px;border-radius:50%;background:var(--line-1)}
+.log{padding:14px 16px;min-height:120px;max-height:240px;overflow-y:auto;line-height:1.7}
+.log .ln{white-space:pre-wrap}
+.log .sys{color:var(--faint)}.log .ok{color:var(--green)}.log .err{color:var(--red)}.log .hi{color:var(--amber2)}.log .you{color:var(--teal)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px 16px;border-top:1px solid var(--line)}
+.btn{font-family:var(--hud);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);border:1px solid var(--line-1);background:transparent;padding:8px 14px;cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--amber-b);color:var(--amber);box-shadow:0 0 16px -6px var(--amber-b)}
+.btn.primary{border-color:var(--amber-b);color:var(--amber);background:var(--amber-d)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.fld{font-family:var(--mono);font-size:13px;background:#0a0c10;border:1px solid var(--line-1);color:var(--ink);padding:8px 11px;width:90px;outline:none}
+.fld:focus{border-color:var(--amber-b)}
+.lab{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+.flag{margin-top:16px;font-family:var(--mono);font-size:13.5px;color:var(--green);background:rgba(110,231,168,.08);border:1px dashed var(--green);padding:12px 16px;display:none}
+.chal.solved .flag{display:block}
+.lesson{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--faint);line-height:1.6;display:none}
+.chal.solved .lesson{display:block}
+.lesson b{color:var(--dim)}
+.onchain{border:1px dashed var(--amber-b);border-radius:3px;padding:22px 24px;margin-top:6px;background:var(--amber-d)}
+.onchain h3{font-family:var(--sans);font-weight:800;font-size:1.1rem;margin-bottom:8px}
+.onchain p{color:var(--dim);font-size:14px;max-width:70ch}
+.onchain .tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber-b);padding:3px 8px;display:inline-block;margin-bottom:12px}
+.foot{border-top:1px solid var(--line);padding:40px 0;color:var(--faint);font-family:var(--hud);font-size:13px;letter-spacing:.03em;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.foot a:hover{color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="fx fx-grain"></div><div class="fx fx-scan"></div><div class="fx fx-vig"></div>
+<span class="frame tl"></span><span class="frame tr"></span><span class="frame bl"></span><span class="frame br"></span>
+
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html">TSOLDORJ<b>//</b><span style="color:var(--faint)">PROOF</span></a>
+  <div class="links hud"><a href="index.html">◄ portfolio</a><a href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">github↗</a></div>
+</div></nav>
+
+<header class="head"><div class="wrap">
+  <div class="kicker hud"><span class="blink"></span>CTF // CAPTURE THE FLAG</div>
+  <h1>Don't trust.<br>Break it yourself.</h1>
+  <p class="lede">Every "security" claim on my site is a liability until you can test it. So here are real bug classes — the same ones I write up in my repos — rebuilt as <b>interactive challenges you exploit in your browser</b>. No wallet, no install. Find the flaw, take the flag.</p>
+  <div class="scoreline mono"><span>SOLVED: <b id="score">0</b> / <span id="total">3</span></span><span id="badges"></span><button class="reset" id="reset">reset progress</button></div>
+</div></header>
+
+<main class="wrap"><div class="ladder" id="ladder"></div>
+
+  <div class="onchain">
+    <span class="tag mono">advanced · on-chain</span>
+    <h3>Level ∞ — break it for real, on Sepolia</h3>
+    <p>The final challenge isn't simulated: a vulnerable contract deployed to a public testnet. Connect a wallet, exploit it on-chain, and an on-chain <code>Solved(you)</code> event proves it — the only place on this site a wallet does anything, and it only ever sends the exploit transaction you choose. <b style="color:var(--amber2)">Deploying shortly.</b></p>
+  </div>
+</main>
+
+<footer class="foot wrap hud">
+  <span>© 2026 TSOLMONDORJ NATSAGDORJ // 0xSOFTBOI</span>
+  <span><a href="index.html">portfolio</a> · <a href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">github</a></span>
+</footer>
+
+<script>
+const STORE='ctf_solved_v1';
+const solved=new Set(JSON.parse(localStorage.getItem(STORE)||'[]'));
+function persist(){localStorage.setItem(STORE,JSON.stringify([...solved]));paint();}
+function paint(){
+  document.getElementById('score').textContent=solved.size;
+  document.getElementById('badges').innerHTML=[...challenges].map(c=>`<span style="color:${solved.has(c.id)?'var(--green)':'var(--faint)'}">${solved.has(c.id)?'◆':'◇'}</span>`).join(' ');
+  challenges.forEach(c=>{const el=document.getElementById('chal-'+c.id);if(!el)return;
+    const b=el.querySelector('.badge');
+    if(solved.has(c.id)){el.classList.add('solved');b.className='badge solved';b.textContent='solved';}
+  });
+}
+function markSolved(id){if(!solved.has(id)){solved.add(id);persist();}}
+
+const challenges=[
+{ id:'die', title:'The loaded die', diff:'easy', goal:'Win 3 bets in a row against a casino that swears its rolls are random.',
+  brief:`This contract picks a "random" dice roll, takes your 1-ETH bet, and pays 2 ETH if you guessed right. The seed is marked <b>private</b> — but on a public blockchain, <b>private only hides it from other contracts, never from you</b>. Storage slot 0 is world-readable, and the roll is a pure function of it. Read the seed, run the same math, bet the answer. Every time.`,
+  code:`<span class="k">contract</span> <span class="s">LoadedDie</span> {
+  <span class="k">uint256</span> <span class="bug">private seed</span>;        <span class="c">// "private" — but slot 0 is public on-chain</span>
+  <span class="k">function</span> <span class="v">roll</span>() <span class="k">internal returns</span> (<span class="k">uint8</span>) {
+    <span class="c">// deterministic LCG — fully predictable from the seed</span>
+    seed = seed * <span class="v">6364136223846793005</span> + <span class="v">1442695040888963407</span>;
+    <span class="k">return uint8</span>(seed >> <span class="v">192</span>) % <span class="v">6</span> + <span class="v">1</span>;
+  }
+  <span class="k">function</span> <span class="v">bet</span>(<span class="k">uint8</span> guess) <span class="k">external payable</span> {
+    <span class="k">require</span>(msg.value == <span class="v">1 ether</span>);
+    <span class="k">if</span> (<span class="bug">roll() == guess</span>) payable(msg.sender).transfer(<span class="v">2 ether</span>);
+  }
+}`,
+  flag:'flag{storage_is_never_private}',
+  lesson:`On-chain "private" is an access modifier, not encryption — anyone can read slot 0 with <code>eth_getStorageAt</code>. And any RNG derived from on-chain state (seed, <code>block.prevrandao</code>, <code>blockhash</code>) is predictable within the same block. Real randomness needs a commit-reveal scheme or a VRF — which is exactly what I rebuilt in <b>dice</b> and <b>satoshi_flip</b>.`,
+  mount(root,onWin){
+    const MASK=(1n<<256n)-1n, A=6364136223846793005n, C=1442695040888963407n;
+    let seed=(0x9e3779b97f4a7c15n*7n+1n)&MASK, wins=0, log;
+    const peek=s=>{const ns=(s*A+C)&MASK;return Number((ns>>192n)%6n)+1;}; // what roll() will return next
+    function out(cls,t){const d=document.createElement('div');d.className='ln '+cls;d.textContent=t;log.appendChild(d);log.scrollTop=log.scrollHeight;}
+    root.innerHTML=`<div class="console">
+      <div class="console-bar" aria-hidden="true"><span class="d"></span><span class="d"></span><span class="d"></span>&nbsp;LoadedDie @ 0xD1CE…  ·  exploit console</div>
+      <div class="log" id="log-die" role="log" aria-live="polite"></div>
+      <div class="controls">
+        <button class="btn" id="read-die">read slot 0 (seed)</button>
+        <button class="btn" id="predict-die">predict roll()</button>
+        <span class="lab">bet:</span><input class="fld" id="guess-die" type="number" min="1" max="6" placeholder="1-6" aria-label="your bet, 1 to 6">
+        <button class="btn primary" id="bet-die">place bet (1 Ξ)</button>
+      </div></div>`;
+    log=root.querySelector('#log-die');
+    out('sys','> casino online. rolls are "provably fair". win 3 in a row to prove otherwise.');
+    root.querySelector('#read-die').onclick=()=>out('you','> eth_getStorageAt(slot 0)  →  0x'+seed.toString(16).padStart(64,'0'));
+    root.querySelector('#predict-die').onclick=()=>out('hi','> next roll() = uint8(((seed*A+C) >> 192) % 6) + 1  =  '+peek(seed));
+    function placeBet(){
+      const g=parseInt(root.querySelector('#guess-die').value,10);
+      if(!(g>=1&&g<=6)){out('err','> invalid bet — pick 1–6');return;}
+      const r=peek(seed); seed=(seed*A+C)&MASK;            // bet() calls roll(), advancing the seed
+      out('you','> bet('+g+')');
+      if(r===g){wins++;out('ok','> roll = '+r+'  ✓ WIN  ('+wins+'/3)  +2 Ξ');
+        if(wins>=3){out('ok','> the house is broken. flag released ↓');onWin();
+          const flag=root.closest('.chal').querySelector('.flag');if(flag)flag.scrollIntoView({block:'nearest'});}}
+      else{wins=0;out('err','> roll = '+r+'  ✗ lose  (streak reset)');}
+    }
+    root.querySelector('#bet-die').onclick=placeBet;
+    root.querySelector('#guess-die').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();placeBet();}});
+  }
+},
+{ id:'bridge', title:'Paid twice', diff:'medium', goal:'Drain a cross-chain bridge that forgot to mark releases as spent.', locked:true,
+  brief:'A custodial bridge releases funds against a validator signature — but never records that a given transfer was already paid. Replay the same signed release and the bridge pays out again. (Interactive build in progress.)',
+  code:'', flag:'flag{idempotency_or_insolvency}', lesson:'', mount(){} },
+{ id:'mint', title:'Unbacked mint', diff:'hard', goal:'Mint more wrapped tokens than the collateral locked behind them.', locked:true,
+  brief:'A lock-and-mint bridge lets you mint on the remote chain against an attestation — but the attestation can be replayed, breaking the supply ≤ collateral invariant. (Interactive build in progress.)',
+  code:'', flag:'flag{supply_exceeds_collateral}', lesson:'', mount(){} },
+];
+document.getElementById('total').textContent=challenges.length;
+
+const ladder=document.getElementById('ladder');
+challenges.forEach((c,i)=>{
+  const el=document.createElement('div');el.className='chal'+(c.locked?' locked':'');el.id='chal-'+c.id;
+  el.innerHTML=`<div class="chal-h" role="button" ${c.locked?'tabindex="-1" aria-disabled="true"':'tabindex="0"'} aria-expanded="false" aria-controls="body-${c.id}">
+      <span class="idx mono">[${String(i+1).padStart(2,'0')}]</span>
+      <span class="ttl">${c.title}</span>
+      <span class="diff mono">${c.diff}</span>
+      <span class="badge ${c.locked?'locked':'unsolved'}">${c.locked?'locked':'unsolved'}</span>
+      <span class="chev" aria-hidden="true">▸</span>
+    </div>
+    <div class="chal-body" id="body-${c.id}">
+      <div class="goal mono">🎯 ${c.goal}</div>
+      <div class="brief">${c.brief}</div>
+      ${c.code?`<pre class="code">${c.code}</pre>`:''}
+      <div class="mount"></div>
+      <div class="flag mono">🏴 ${c.flag}</div>
+      <div class="lesson">${c.lesson}</div>
+    </div>`;
+  ladder.appendChild(el);
+  const head=el.querySelector('.chal-h');
+  function toggle(){if(c.locked){return;}const open=el.classList.toggle('open');head.setAttribute('aria-expanded',open);
+    if(open&&!el.dataset.mounted&&c.mount){c.mount(el.querySelector('.mount'),()=>markSolved(c.id));el.dataset.mounted='1';}}
+  head.onclick=toggle;
+  head.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
+});
+document.getElementById('reset').onclick=()=>{solved.clear();localStorage.removeItem(STORE);
+  document.querySelectorAll('.chal').forEach(e=>{e.classList.remove('solved');delete e.dataset.mounted;e.classList.remove('open');
+    const h=e.querySelector('.chal-h');if(h)h.setAttribute('aria-expanded','false');
+    const b=e.querySelector('.badge');if(!e.classList.contains('locked')){b.className='badge unsolved';b.textContent='unsolved';}});paint();};
+paint();
+</script>
+</body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSOLMONDORJ NATSAGDORJ // work &amp; proof</title>
+<meta name="description" content="Security &amp; systems engineer. Cross-chain infrastructure, smart-contract security, and applied cryptography — every claim linked to a primary source you can verify.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script>
+<style>
+:root{
+  --bg:#08080a; --bg-1:#0d0e12; --bg-2:#121419; --bg-3:#181b22;
+  --line:#211f1c; --line-1:#37322c;
+  --ink:#ece5db; --dim:#a79c8d; --faint:#8a8174;
+  --amber:#ff9d4d; --amber2:#ffc081; --amber-d:rgba(255,157,77,.10); --amber-b:rgba(255,157,77,.42);
+  --teal:#67d4c8; --teal-d:rgba(103,212,200,.10); --teal-b:rgba(103,212,200,.38);
+  --warn:#e8c45a; --warn-d:rgba(232,196,90,.10);
+  --accent:var(--amber);
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --hud:'Rajdhani',var(--mono);
+  --display:'Orbitron',var(--hud);
+  --sans:'Inter',system-ui,sans-serif;
+  --maxw:1140px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.mono{font-family:var(--mono)} .hud{font-family:var(--hud)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 30px}
+
+/* ── CINEMATIC OVERLAYS (fixed) ── */
+.fx{position:fixed;inset:0;pointer-events:none;z-index:90}
+.fx-scan{background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.13) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;opacity:.45}
+.fx-grain{opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .5s steps(2) infinite}
+@keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-4%,3%)}100%{transform:translate(3%,-2%)}}
+.fx-vig{background:radial-gradient(ellipse 130% 115% at 50% 40%,transparent 50%,rgba(0,0,0,.6) 100%)}
+.frame{position:fixed;z-index:91;width:24px;height:24px;border:1px solid var(--amber-b);pointer-events:none;opacity:.5}
+.frame.tl{top:14px;left:14px;border-right:0;border-bottom:0}.frame.tr{top:14px;right:14px;border-left:0;border-bottom:0}
+.frame.bl{bottom:14px;left:14px;border-right:0;border-top:0}.frame.br{bottom:14px;right:14px;border-left:0;border-top:0}
+
+/* reduced motion */
+.kill-anim,.kill-anim::before,.kill-anim::after{animation:none!important}
+body.no-motion .fx-grain,body.no-motion .glitch::before,body.no-motion .glitch::after,body.no-motion .badge .dot.live,body.no-motion .kicker .blink,body.no-motion .scroll-cue .ln{animation:none!important}
+@media(prefers-reduced-motion:reduce){.fx-grain,.glitch::before,.glitch::after,.badge .dot.live,.kicker .blink,.scroll-cue .ln{animation:none!important}.rv{opacity:1!important;transform:none!important}}
+.mtog{font-family:var(--hud);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-1);padding:5px 9px;cursor:pointer;background:transparent;transition:.18s;display:inline-flex;align-items:center;gap:7px}
+.mtog:hover{color:var(--amber);border-color:var(--amber-b)}
+.mtog i{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber);font-style:normal}
+body.no-motion .mtog i{background:var(--faint);box-shadow:none}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:60;backdrop-filter:blur(9px);background:linear-gradient(180deg,rgba(8,8,10,.82),rgba(8,8,10,.2));border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.scrolled{border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.nav .brand{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.nav .brand b{color:var(--amber);text-shadow:0 0 14px var(--amber-b)}
+.nav .links{display:flex;align-items:center;gap:22px;font-family:var(--hud);font-size:13.5px;letter-spacing:.05em;color:var(--dim);text-transform:uppercase}
+.nav .links a{transition:color .2s}
+.nav .links a:hover{color:var(--amber);text-shadow:0 0 10px var(--amber-b)}
+@media(max-width:860px){.nav .links a:not(.keep){display:none}}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 110px;overflow:hidden;
+  background:radial-gradient(ellipse 95% 60% at 50% 96%,rgba(255,120,40,.22),transparent 60%),
+             radial-gradient(ellipse 80% 70% at 50% 20%,rgba(40,60,66,.35),transparent 70%),
+             linear-gradient(180deg,#0b0f12 0%,#0a0908 55%,#08080a 100%)}
+#city{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+.hero-fade{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:1;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.hero-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 58% 56% at 33% 44%,rgba(8,9,12,.82),rgba(8,9,12,.4) 46%,transparent 70%)}
+.glabel{position:absolute;z-index:2;font-family:var(--hud);font-weight:600;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);white-space:nowrap;display:flex;align-items:center;gap:8px;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.05);-webkit-backdrop-filter:blur(9px) brightness(1.2);backdrop-filter:blur(9px) brightness(1.2);border:1px solid rgba(255,255,255,.16);box-shadow:0 6px 22px -8px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.2);pointer-events:none}
+.glabel .gd{width:6px;height:6px;border-radius:50%}
+.glabel.cA{left:7%;top:58%}.glabel.cB{right:7%;top:58%}.glabel.sw{left:16%;bottom:10%}.glabel.bb{right:13%;bottom:10%}
+@media(max-width:760px){.glabel{font-size:9px;padding:5px 9px;gap:6px}.glabel.cA{left:4%}.glabel.cB{right:4%}.glabel.sw{left:4%}.glabel.bb{right:4%}}
+@media(prefers-reduced-motion:reduce){.glabel{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}}
+.hero .wrap{position:relative;z-index:3}
+.kicker{font-family:var(--hud);font-size:14px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--amber2);margin-bottom:28px;display:flex;align-items:center;gap:12px;text-shadow:0 0 18px rgba(255,157,77,.4)}
+.kicker .blink{width:8px;height:8px;background:var(--amber);border-radius:1px;box-shadow:0 0 12px var(--amber);animation:bk 1.4s steps(1) infinite}
+@keyframes bk{50%{opacity:.2}}
+.kicker .ln{width:40px;height:1px;background:var(--amber-b)}
+.glitch{position:relative;font-family:var(--display);font-size:clamp(2.2rem,7vw,5.2rem);line-height:1.02;font-weight:800;letter-spacing:.01em;text-transform:uppercase;text-shadow:0 2px 40px rgba(0,0,0,.6)}
+.glitch .l2{color:var(--faint);-webkit-text-stroke:1px var(--line-1)}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;left:0;top:0;width:100%;height:100%;overflow:hidden}
+.glitch::before{color:var(--teal);transform:translate(-2px,0);animation:g1 5.5s steps(2) infinite;opacity:.85;mix-blend-mode:screen}
+.glitch::after{color:var(--amber);transform:translate(2px,0);animation:g2 4.6s steps(2) infinite;opacity:.85;mix-blend-mode:screen}
+@keyframes g1{0%,90%,100%{clip-path:inset(0 0 100% 0);transform:translate(-2px,0)}92%{clip-path:inset(20% 0 55% 0);transform:translate(-4px,0)}96%{clip-path:inset(60% 0 18% 0);transform:translate(3px,0)}}
+@keyframes g2{0%,88%,100%{clip-path:inset(100% 0 0 0);transform:translate(2px,0)}90%{clip-path:inset(30% 0 45% 0);transform:translate(4px,0)}95%{clip-path:inset(10% 0 75% 0);transform:translate(-3px,0)}}
+.hero .lede{font-size:clamp(1.05rem,2.1vw,1.35rem);color:var(--dim);max-width:42ch;margin:32px 0 0;line-height:1.55}
+.hero .lede b{color:var(--ink);font-weight:600}
+.hero .lede .hl{color:var(--amber2);font-weight:500;text-shadow:0 0 16px var(--amber-d)}
+.proofbar{position:relative;z-index:3;margin-top:48px;display:flex;flex-wrap:wrap;gap:11px}
+.badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--hud);font-size:13.5px;font-weight:500;letter-spacing:.03em;color:var(--dim);
+  border:1px solid var(--line-1);background:rgba(13,14,18,.55);backdrop-filter:blur(5px);padding:9px 14px;clip-path:polygon(0 0,100% 0,100% 68%,calc(100% - 9px) 100%,0 100%);transition:.18s}
+.badge:hover{border-color:var(--amber-b);color:var(--ink);box-shadow:0 0 24px -5px var(--amber-b);transform:translateY(-2px)}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px var(--amber-d),0 0 9px var(--amber)}
+.badge .dot.live{animation:pulse 2.3s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px var(--amber-d),0 0 9px var(--amber)}50%{box-shadow:0 0 0 7px rgba(255,157,77,.04),0 0 4px var(--amber)}}
+.badge b{color:var(--ink);font-weight:600}.badge .arr{color:var(--faint)}
+.scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;font-family:var(--hud);font-size:12px;letter-spacing:.3em;color:var(--faint);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:9px}
+.scroll-cue .ln{width:1px;height:36px;background:linear-gradient(var(--amber),transparent);animation:cue 2s ease-in-out infinite}
+@keyframes cue{0%,100%{opacity:.25}50%{opacity:1}}
+
+/* ── SECTIONS (calm core) ── */
+.sec{padding:92px 0;border-top:1px solid var(--line);position:relative;background:var(--bg)}
+.sec::before{content:"";position:absolute;top:-1px;left:0;width:78px;height:2px;background:var(--amber);box-shadow:0 0 14px var(--amber-b)}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+.sec-num{font-family:var(--hud);font-size:14px;font-weight:600;color:var(--amber);letter-spacing:.1em}
+.sec h2{font-family:var(--sans);font-size:clamp(1.55rem,3vw,2.2rem);font-weight:800;letter-spacing:-.02em;text-transform:uppercase}
+.sec-sub{color:var(--dim);max-width:64ch;margin:14px 0 42px;font-size:15.5px}
+.sec-sub .warnword{color:var(--warn)}
+
+/* ── CAPABILITY MATRIX ── */
+.matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
+@media(max-width:920px){.matrix{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.matrix{grid-template-columns:1fr}}
+.tile{border:1px solid var(--line);background:linear-gradient(160deg,var(--bg-1),var(--bg));border-radius:3px;padding:18px;position:relative;transition:.2s;overflow:hidden;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
+.tile::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% -10%,var(--amber-d),transparent 70%);opacity:0;transition:.25s}
+.tile:hover{border-color:var(--amber-b);transform:translateY(-3px);box-shadow:0 0 28px -8px var(--amber-b)}
+.tile:hover::after{opacity:1}
+.tile.explore:hover{border-color:rgba(232,196,90,.45);box-shadow:0 0 28px -8px rgba(232,196,90,.4)}
+.tile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tile-cap{font-family:var(--hud);font-size:15px;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+.status{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border:1px solid;display:inline-flex;align-items:center;gap:5px}
+.status.proven{color:var(--amber);border-color:var(--amber-b);background:var(--amber-d)}
+.status.explore{color:var(--warn);border-color:rgba(232,196,90,.4);background:var(--warn-d)}
+.status i{width:5px;height:5px;border-radius:50%;background:currentColor;font-style:normal;box-shadow:0 0 6px currentColor}
+.tile-proof{font-size:13px;color:var(--dim);line-height:1.45;position:relative;z-index:1}
+.tile-proof code{font-family:var(--mono);font-size:11.5px;color:var(--amber2);background:var(--bg-3);padding:1px 5px;border-radius:2px}
+
+/* ── PROJECT CARDS ── */
+.cards{display:flex;flex-direction:column;gap:18px}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,var(--bg-1),var(--bg));border-radius:3px;padding:28px 30px;transition:.2s;position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--amber),var(--teal));opacity:.7}
+.card:hover{border-color:var(--line-1);box-shadow:0 0 44px -16px var(--amber-b)}
+.card-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:8px}
+.card-name{font-family:var(--mono);font-size:13px;color:var(--amber2);font-weight:700;text-shadow:0 0 14px var(--amber-d)}
+.chip{font-family:var(--hud);font-size:11.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line-1);padding:3px 9px}
+.chip.live{color:var(--amber);border-color:var(--amber-b);box-shadow:0 0 12px -4px var(--amber-b)}
+.card h3{font-family:var(--sans);font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin:8px 0 13px;line-height:1.14}
+.card p{color:var(--dim);font-size:15px;max-width:70ch;margin-bottom:18px}
+.card p b{color:var(--ink);font-weight:600}
+.stats{display:flex;flex-wrap:wrap;gap:30px;margin:20px 0;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat .n{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--ink);line-height:1}
+.stat .n .u{font-size:.8rem;color:var(--amber)}
+.stat .k{font-family:var(--hud);font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin-top:7px}
+.card-links{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:15px}
+.plink{font-family:var(--hud);font-size:13.5px;font-weight:500;letter-spacing:.03em;color:var(--dim);border:1px solid var(--line-1);padding:7px 13px;transition:.16s;display:inline-flex;gap:8px;align-items:center}
+.plink:hover{color:var(--ink);border-color:var(--amber-b);background:var(--amber-d);box-shadow:0 0 18px -6px var(--amber-b)}
+.plink .arr{color:var(--faint)}
+.limit{font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;gap:9px;align-items:flex-start;line-height:1.55;max-width:76ch}
+.limit::before{content:"⚠";color:var(--warn);flex-shrink:0}
+.subhead{display:flex;align-items:center;gap:13px;margin:38px 0 4px;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber2)}
+.subhead:first-child{margin-top:0}
+.subhead::before{content:"";width:20px;height:1px;background:var(--amber-b)}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.tl{display:flex;flex-direction:column;border-left:1px solid var(--line);margin-left:6px}
+.tl-item{position:relative;padding:0 0 26px 28px}
+.tl-item::before{content:"";position:absolute;left:-5px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--amber-b);transition:.2s}
+.tl-item:hover::before{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.tl-yr{font-family:var(--mono);font-size:12px;color:var(--amber);margin-bottom:3px}
+.tl-item h3{font-family:var(--mono);font-size:1rem;font-weight:700;margin-bottom:3px}
+.tl-item h3 a:hover{color:var(--amber)}
+.tl-item p{color:var(--dim);font-size:14px;max-width:66ch}
+/* ── visual gallery ── */
+.cards{display:grid!important;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:760px){.cards{grid-template-columns:1fr}.card.feature .cover{aspect-ratio:16/8}}
+.subhead{grid-column:1/-1}
+.card{padding:0!important;display:flex;flex-direction:column}
+.card::before{display:none}
+.card.feature{grid-column:1/-1}
+.cover{position:relative;width:100%;aspect-ratio:16/8;background:#070809;border-bottom:1px solid var(--line);overflow:hidden}
+.card.feature .cover{aspect-ratio:21/8}
+.card.feature .cover-img{object-position:center}
+.cover canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,rgba(7,8,9,.92));z-index:1}
+.cover.shot::after{background:linear-gradient(180deg,rgba(7,8,9,.42),transparent 26%,transparent 50%,rgba(7,8,9,.92))}
+.cover.tshot::after{display:none}
+.cover.tshot .cv-name,.cover.tshot .cv-stat{display:none}
+.cover.tshot{background:#070809}
+.cover.tshot .cover-img{object-fit:contain;object-position:center}
+.cv-name{position:absolute;left:18px;bottom:12px;z-index:2;font-family:var(--display);font-weight:700;font-size:1.02rem;letter-spacing:.02em;text-shadow:0 2px 16px #000}
+.cv-stat{position:absolute;right:16px;top:14px;z-index:2;text-align:right}
+.cv-stat .n{font-family:var(--mono);font-weight:700;font-size:1.5rem;line-height:1;color:var(--ink);text-shadow:0 2px 16px #000}
+.cv-stat .n .u{font-size:.7rem;color:var(--amber)}
+.cv-stat .k{font-family:var(--hud);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-top:4px}
+.card-in{padding:15px 18px 17px;display:flex;flex-direction:column;gap:9px;flex:1}
+.card-in .chips{display:flex;flex-wrap:wrap;gap:6px}
+.card-in h3{font-size:1.08rem;font-weight:800;letter-spacing:-.01em;line-height:1.18;margin:0}
+.card-in p{font-size:13px;color:var(--dim);margin:0;max-width:none}
+.card.feature .card-in p{font-size:14.5px}
+.card-in .limit{margin-top:auto;padding-top:4px}
+
+/* ── FOOTER ── */
+.foot{border-top:1px solid var(--line);padding:48px 0;color:var(--faint);font-family:var(--hud);font-size:13.5px;letter-spacing:.03em;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px}
+.foot a:hover{color:var(--amber)}
+.slice-note{position:relative;z-index:61;margin:0 auto;max-width:var(--maxw);padding:70px 30px 12px;font-family:var(--mono);font-size:11.5px;color:var(--warn);background:rgba(232,196,90,.06);border-bottom:1px solid rgba(232,196,90,.25)}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}.rv.in{opacity:1;transform:none}
+a:focus-visible,button:focus-visible,input:focus-visible,[role=button]:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="fx fx-grain"></div><div class="fx fx-scan"></div><div class="fx fx-vig"></div>
+<span class="frame tl"></span><span class="frame tr"></span><span class="frame bl"></span><span class="frame br"></span>
+
+<div class="slice-note mono">◆ DRAFT — full content in place. Still tuning: the liquid-metal hero, and the on-chain CTF level (deploying soon).</div>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">TSOLDORJ<b>//</b><span style="color:var(--faint)">PROOF</span></a>
+    <div class="links hud">
+      <a href="#capabilities">capabilities</a>
+      <a href="#work">work</a>
+      <a href="#research">research</a>
+      <a href="#ctf">ctf</a>
+      <a href="#flagship">suwappu</a>
+      <a class="keep" href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">github↗</a>
+      <a href="https://0xsoftboi.github.io" target="_blank" rel="noopener">writing↗</a>
+      <button class="mtog keep" id="mtog" aria-pressed="false" title="Pause / resume motion"><i></i><span id="mtog-l">motion</span></button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="city" aria-hidden="true"></canvas>
+  <div class="hero-fade"></div>
+  <div class="hero-scrim"></div>
+  <div class="glabel cA"><span class="gd" style="background:#67d4c8;box-shadow:0 0 8px #67d4c8"></span>Chain A</div>
+  <div class="glabel cB"><span class="gd" style="background:#ff9d4d;box-shadow:0 0 8px #ff9d4d"></span>Chain B</div>
+  <div class="glabel sw"><span class="gd" style="background:#6ee7a8;box-shadow:0 0 8px #6ee7a8"></span>suwappu.bot · cross-chain swaps</div>
+  <div class="glabel bb"><span class="gd" style="background:#6ee7a8;box-shadow:0 0 8px #6ee7a8"></span>BRIDGE-bench · exploit detection</div>
+  <div class="wrap">
+    <div class="kicker hud"><span class="blink"></span>SECURITY &amp; SYSTEMS<span class="ln"></span>BUILD · BREAK · VERIFY</div>
+    <h1 class="glitch" data-t="TSOLMONDORJ">TSOLMONDORJ<br><span class="l2">NATSAGDORJ</span></h1>
+    <p class="lede">I build cross-chain infrastructure and break it on purpose — across <b>ZK, FHE, TEE, and post-quantum</b> cryptography. <span class="hl">Every claim here links to a primary source you can verify yourself.</span></p>
+    <div class="proofbar">
+      <a class="badge" href="https://github.com/alloy-rs/core/pull/1105" target="_blank" rel="noopener"><span class="dot"></span>MERGED // <b>alloy</b><span class="arr">↗</span></a>
+      <a class="badge" href="https://github.com/uutils/coreutils/pull/12327" target="_blank" rel="noopener"><span class="dot"></span>MERGED // <b>uutils/coreutils</b><span class="arr">↗</span></a>
+      <a class="badge" href="https://eth-sepolia.blockscout.com/address/0x99db76240c884F35133A6c9a12249C67a906da12" target="_blank" rel="noopener"><span class="dot live"></span>FHE <b>LIVE ON SEPOLIA</b><span class="arr">↗</span></a>
+      <a class="badge" href="https://suwappu.bot" target="_blank" rel="noopener"><span class="dot live"></span><b>SUWAPPU.BOT</b> // LIVE<span class="arr">↗</span></a>
+    </div>
+  </div>
+  <div class="scroll-cue hud"><span>scroll</span><span class="ln"></span></div>
+</header>
+
+<main>
+<section class="sec" id="capabilities">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num hud">[ 01 ]</span><h2>What I can prove</h2></div>
+    <p class="sec-sub">The breadth is the point — and none of it is an empty claim. Each capability is backed by code you can run, a contract you can inspect, or a paper you can read. One tile is marked <span class="warnword">exploring</span> on purpose: I won't show it as proven until there's a shipped artifact behind it.</p>
+    <div class="matrix" id="matrix"></div>
+  </div>
+</section>
+<section class="sec" id="work">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num hud">[ 02 ]</span><h2>Selected work</h2></div>
+    <p class="sec-sub">Grouped by capability — each with the verified headline stat, a proof link you can click, and an honest note on where the guarantee ends. Every test count and contract address here was checked against the source.</p>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+<section class="sec" id="research">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num hud">[ 03 ]</span><h2>Research</h2></div>
+    <p class="sec-sub">Measuring what automated reasoning can and can't do — pointed at DeFi exploits, at materials discovery, and at the insides of a language model. Reported honestly: where a number is paper-reported rather than committed, it says so.</p>
+    <div class="cards" id="researchcards"></div>
+  </div>
+</section>
+<section class="sec" id="ctf">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num hud">[ 04 ]</span><h2>Don't trust — break it</h2></div>
+    <p class="sec-sub">Every security claim above is just words until you can test it. So I rebuilt the real bug classes from my repos as <b style="color:var(--ink)">interactive challenges you exploit in the browser</b> — predictable randomness, bridge double-pays, unbacked mints. Find the flaw, take the flag. An advanced level deploys on-chain to a public testnet (soon).</p>
+    <a href="ctf.html" style="display:inline-flex;align-items:center;gap:12px;font-family:var(--hud);font-size:15px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber-b);background:var(--amber-d);padding:14px 22px;clip-path:polygon(0 0,100% 0,100% 70%,calc(100% - 11px) 100%,0 100%);transition:.18s" onmouseover="this.style.boxShadow='0 0 26px -6px var(--amber-b)'" onmouseout="this.style.boxShadow='none'">⚡ Enter the CTF<span style="color:var(--faint)">— 3 challenges, no wallet needed →</span></a>
+  </div>
+</section>
+
+<section class="sec" id="flagship">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num hud">[ 05 ]</span><h2>Suwappu — shipped</h2></div>
+    <p class="sec-sub">Not a pitch — proof of execution. An agent-native cross-chain DEX that exists, in public, with artifacts you can pull right now.</p>
+    <div class="cards" id="flagcard"></div>
+  </div>
+</section>
+<section class="sec" id="timeline">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num hud">[ 06 ]</span><h2>How it started</h2></div>
+    <p class="sec-sub">The arc — from a Reddit bot in 2018 to post-quantum bridges in 2026. Old experiments, kept public on purpose.</p>
+    <div class="tl" id="timelinelist"></div>
+  </div>
+</section>
+</main>
+
+<footer class="foot wrap hud">
+  <span>© 2026 TSOLMONDORJ NATSAGDORJ // 0xSOFTBOI</span>
+  <span><a href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">github</a> · <a href="https://0xsoftboi.github.io" target="_blank" rel="noopener">writing</a> · <a href="https://orcid.org/0009-0009-6010-6273" target="_blank" rel="noopener">orcid</a></span>
+</footer>
+
+<!-- ── CONTENT RENDER ── -->
+<script>
+const caps=[
+ {cap:"Zero-knowledge",st:"proven",proof:"Circom + Groth16 move-legality over a Poseidon commitment, <b>verified on-chain</b> in Foundry."},
+ {cap:"FHE",st:"proven",proof:"Check/capture predicates over an <b>encrypted</b> board (Zama tfhe-rs) — <code>live on Sepolia</code>."},
+ {cap:"TEE custody",st:"proven",proof:"Non-custodial Turnkey TEE wallets + AES-256-GCM/KMS envelope encryption, in production."},
+ {cap:"Post-quantum",st:"proven",proof:"ML-KEM-768 + ML-DSA-65 (FIPS 203/204) with Shamir <code>k-of-n</code> threshold reconstruction. <span style=\"color:var(--faint)\">— private research build</span>"},
+ {cap:"Bridges",st:"proven",proof:"Lock-mint invariant gated &amp; fuzzed; Ronin/Wormhole/Nomad exploit reproductions."},
+ {cap:"Exchanges / DEX",st:"proven",proof:"Live cross-chain DEX, x·y=k AMM, gTrade-style perps, CoW TWAP — all tested."},
+ {cap:"Consensus",st:"proven",proof:"PBFT vs PoS vs PoW simulator; OP-Stack + Reth rollup, CI-validated."},
+ {cap:"Randomness",st:"proven",proof:"Commit-reveal &amp; BLS vs native-DKG, with the observe-and-abort footgun handled."},
+ {cap:"Algorithms / ML",st:"proven",proof:"Active learning on 256K crystals; mechanistic-interp on GPT-2 negation."},
+ {cap:"Frontends",st:"proven",proof:"Runnable: a Sui game on GH Pages, an MLX TUI, an iOS ARKit capture app."},
+ {cap:"Wallets",st:"proven",proof:"On-chain CryptoNote address validation in Solidity; TEE-isolated key custody."},
+ {cap:"MPC",st:"explore",proof:"Threshold reconstruction shipped in PQ work; full multi-party compute is <b>exploring</b>, not claimed."},
+];
+const mEl=document.getElementById('matrix');
+caps.forEach(c=>{const t=document.createElement('div');t.className='tile rv'+(c.st==='explore'?' explore':'');
+ t.innerHTML=`<div class="tile-top"><span class="tile-cap hud">${c.cap}</span><span class="status ${c.st==='proven'?'proven':'explore'}"><i></i>${c.st==='proven'?'proven':'exploring'}</span></div><div class="tile-proof">${c.proof}</div>`;mEl.appendChild(t);});
+
+const GH="https://github.com/0xSoftBoi/";
+const work=[
+ {g:"Bridges & cross-chain",name:"lock-mint-bridge-lab",chips:[["security"],["bridge"],["Foundry"]],title:"The bridge invariant, gated — and fuzzed 51,200 times",
+  body:"A clean-room lock-and-mint bridge built around one accounting identity: <b>minted supply ≤ locked collateral</b>. An attestation gate makes it enforceable; a stateful invariant suite tries to break it. Three real bridge hacks run as standing regressions.",
+  stats:[["51,200","","invariant calls (512×100)"],["17","/17","tests pass"],["3","","hacks reproduced"]],
+  links:[["repo",GH+"lock-mint-bridge-lab"]],
+  limit:"Not deployed, holds no funds. supply≤collateral end-to-end is an operator-coordination property the gate makes enforceable — the trust-minimized light-client path is documented, not built."},
+ {g:"Bridges & cross-chain",name:"cross-evm-bridge",chips:[["security"],["bridge"],["Hardhat·Foundry"]],title:"The bridge that paid twice",
+  body:"A custodial EVM lock/release bridge hardened against the event-redelivery double-pay bug: an <b>idempotent, chain-bound, validator-signed release path</b>, with a finality-aware ethers relayer that separates 'don't pay twice' from 'don't pay for a reorged lock'.",
+  stats:[["6","/6","tests pass"],["chain-bound","","transferId"]],
+  links:[["repo",GH+"cross-evm-bridge"]],
+  limit:"Still custodial — a compromised validator can sign a fake payout; the trust-minimized light-client release is documented, not built."},
+ {g:"Bridges & cross-chain",name:"safexswap",chips:[["bridge"],["wallets"],["Foundry"]],title:"Validating real CryptoNote addresses on-chain, in Solidity",
+  body:"A WSFX ⇄ native Safex Cash bridge whose <code>unwrap</code> validates genuine CryptoNote addresses (base58 decode + keccak checksum) <b>on-chain, before burning</b>, paired with a replay-proof signed mint and an idempotent relayer.",
+  stats:[["7+4","","forge + vitest pass"],["on-chain","","addr validation"]],
+  links:[["repo",GH+"safexswap"]],
+  limit:"Custodial; the contracts, relayer and validator are tested, but no live end-to-end against a Safex daemon has been run."},
+ {g:"Bridges & cross-chain",name:"printing-money-labs",chips:[["security"],["labs"]],title:"12 DeFi exploits, dissected and patched",
+  body:"A book-companion lab collection that breaks then fixes one DeFi vuln per chapter — honeypots, perps, AMMs, bridge double-pays, fake randomness, a ZK proof of the wrong statement, and a 'post-quantum' bridge that <b>Shor breaks anyway</b> (its PQ signature is verified inside a Groth16 proof over a curve Shor breaks).",
+  stats:[["12","","exploit → fix labs"]],
+  links:[["repo",GH+"printing-money-labs"]],
+  limit:"Some bundled test suites need a one-character unicode-string fix to compile; the polished spin-offs (lock-mint, cross-evm) are the runnable, test-passing versions."},
+ {g:"DEX · AMM · perps",name:"quantgroup",chips:[["AMM"],["security"],["Foundry"]],title:"x·y=k AMM as an auditor's reference",
+  body:"A constant-product DEX written like an audit report — named invariants under fuzzing, an adversarial attack suite, and CWE/SWC-annotated defenses including a structural first-depositor inflation fix.",
+  stats:[["18","/18","tests pass"],["3","","fuzzed invariants"]],
+  links:[["repo",GH+"quantgroup"]],
+  limit:"Educational/unaudited; no TWAP oracle, fee-on-transfer unsupported — stated plainly in its SECURITY.md."},
+ {g:"DEX · AMM · perps",name:"blastperps",chips:[["perps"],["DEX"],["Foundry"]],title:"gTrade-style perps core, rebuilt from the docs",
+  body:"A faithful reconstruction of a Gains-style pool-perps engine — single-vault counterparty, up to 150× leverage, liquidation at 90% collateral loss <b>matching the protocol's own worked example</b> in a test.",
+  stats:[["9","/9","tests pass"],["150×","","max leverage"]],
+  links:[["repo",GH+"blastperps"]],
+  limit:"Core protocol is tested and passing; the recovered Next.js frontend depends on a lost private SDK and isn't runnable as-is."},
+ {g:"DEX · AMM · perps",name:"cowswaprouter",chips:[["DEX"],["MEV"],["Foundry·Wake"]],title:"TWAP on CoW Protocol, done two right ways",
+  body:"Protocol-accurate TWAP order-splitting for CoW — a self-hosted PreSign executor and an official ComposableCoW handler with on-chain-validated discretization — fixing the naive integration that called functions mainnet doesn't have.",
+  stats:[["26","/26","tests pass"],["2","","integration paths"]],
+  links:[["repo",GH+"cowswaprouter"]],
+  limit:"Tests use faithful mocks (no live solver); the Wake fuzz suite is separate from the executed Foundry suite."},
+ {g:"DEX · AMM · perps",name:"marketmakehackathon",chips:[["arbitrage"],["security"],["Foundry"]],title:"Aave v3 flash-loan arbitrage, modernized",
+  body:"A zero-capital two-leg cross-DEX arbitrage on Aave v3 flash loans — atomic-or-revert, with an audited security model down to per-leg slippage floors and dangling-approval resets.",
+  stats:[["17","/17","tests pass"]],
+  links:[["repo",GH+"marketmakehackathon"]],
+  limit:"Mock-only testing; the addresses-provider is a deliberate stub that must be wired before mainnet, and minProfit=0 is discouraged."},
+ {g:"ZK · FHE · cryptographic games",name:"fhe-dark-chess",chips:[["live on Sepolia","live"],["FHE"],["Rust · tfhe-rs"]],title:"Fog-of-war chess check, evaluated on an encrypted board",
+  body:"The predicate a ZK-against-your-own-board can't decide — is the king in check? — computed <b>homomorphically over the opponent's encrypted board</b>, revealing only the answer bit. The ZK twin proves your own moves; this proves the joint ones.",
+  stats:[["4","/4","cargo tests pass"],["0x99db…da12","","live fhEVM contract"],["1","bit","leaked / query"]],
+  links:[["contract on Blockscout","https://eth-sepolia.blockscout.com/address/0x99db76240c884F35133A6c9a12249C67a906da12"],["repo",GH+"fhe-dark-chess"]],
+  limit:"The local demo holds one ClientKey and a single signer played both seats — it proves the computation is referee-free, not that the trust is. Contract isn't source-verified on the explorer yet."},
+ {g:"ZK · FHE · cryptographic games",name:"zk-dark-chess",chips:[["ZK"],["Circom·Groth16"]],title:"Real ZK fog-of-war chess, proven on-chain",
+  body:"A Circom/Groth16 circuit proves a chess move is legal against a hidden, <b>Poseidon-committed board</b>, with the proof verified on-chain in Foundry — not a mock.",
+  stats:[["3","/3","on-chain tests"],["~4.3k","","circuit constraints"]],
+  links:[["repo",GH+"zk-dark-chess"]],
+  limit:"A scoped MVP: it can't prove capturing a hidden enemy or check — that's the FHE twin's job. The Groth16 setup is a local demo, not a production ceremony."},
+ {g:"ZK · FHE · cryptographic games",name:"chess",chips:[["on-chain engine"],["RISC Zero ZK"]],title:"Full FIDE chess on-chain, with a ZK settlement path",
+  body:"A complete Solidity chess engine packing the board into <b>one uint256</b>, with EIP-712, optimistic, and RISC Zero ZK settlement paths bound to player signatures so a valid proof can't be forged onto another game.",
+  stats:[["12","/12","tests pass"],["1","uint256","whole board"]],
+  links:[["repo",GH+"chess"]],
+  limit:"The ZK path is exercised via a MockVerifier (it tests the binding, not SNARK soundness); nothing is deployed."},
+ {g:"ZK · FHE · cryptographic games",name:"satoshi_flip",chips:[["randomness"],["Sui Move"],["BLS·DKG"]],title:"Sui coin-flip: BLS vs native randomness, compared",
+  body:"A Sui Move dice/coin-flip implementing both house-signed BLS randomness and trustless native DKG randomness, with the <b>observe-and-abort footgun handled correctly</b> (native path is entry, not public) and a worked threat-model write-up.",
+  stats:[["19","","Move tests"],["2","","randomness models"]],
+  links:[["repo",GH+"satoshi_flip"]],
+  limit:"The BLS path is verifiable but house-trusted (the house can decline to settle a loss); the native DKG path is the trustless default."},
+ {g:"ZK · FHE · cryptographic games",name:"dice",chips:[["security"],["randomness"],["Foundry"]],title:"Anatomy of a fake dice game — then the real one",
+  body:"Dissects a 2018 dice contract whose roll was never used and whose randomness was always zero, then rebuilds it as a provably-fair <b>commit-reveal</b> game with house-edge math, bankroll solvency, and reveal-timeout protection.",
+  stats:[["7","/7","tests pass"],["2","","real bugs confirmed"]],
+  links:[["repo",GH+"dice"]],
+  limit:"There's no safe single-transaction randomness on the EVM; the rebuild uses commit-reveal and documents Chainlink VRF as the oracle alternative."},
+ {g:"Systems · infra · consensus",name:"op-stack-reth",chips:[["L2 / rollup"],["infra"],["CI"]],title:"OP Stack + Reth rollup, one compose up",
+  body:"A pinned, CI-validated Docker Compose + op-deployer + Kurtosis setup that stands up a full OP Stack L2 — Reth execution, op-node, batcher, proposer, monitoring — in replica or sequencer mode.",
+  stats:[["1","compose","full L2 stack"],["CI","","validated"]],
+  links:[["repo",GH+"op-stack-reth"]],
+  limit:"Config-complete and statically validated; a sustained live L2 needs Docker + an L1 RPC/beacon + funded wallets, run on your own infra (not in CI)."},
+ {g:"Systems · infra · consensus",name:"smart-contract-audit-framework",chips:[["security"],["tooling"],["Python"]],title:"Zero-dependency Solidity static analyzer, CI-ready",
+  body:"A stdlib-only Python linter with <b>13 pluggable security/gas detectors</b> and a 46-test marker suite that triages contracts in CI — honest about being a fast first-pass heuristic, not a formal verifier.",
+  stats:[["46","/46","tests pass"],["13","","detectors"]],
+  links:[["repo",GH+"smart-contract-audit-framework"]],
+  limit:"Heuristic, single-file scope, no control/data-flow analysis — and one detector is high-FP and explicitly 'don't gate CI on it' (stated in its limitations doc)."},
+ {g:"Systems · infra · consensus",name:"consensus-benchmarking-suite",chips:[["consensus"],["Python"]],title:"PBFT vs PoS vs PoW, benchmarked head-to-head",
+  body:"A Python CLI that simulates and charts throughput / latency / finality across three consensus families using theory-grounded models — O(n²) PBFT messaging, Casper FFG epochs, Decker–Wattenhofer orphan rates.",
+  stats:[["3","","consensus families"]],
+  links:[["repo",GH+"consensus-benchmarking-suite"]],
+  limit:"Closed-form analytical models with stochastic noise, not discrete-event network simulation — the numbers reflect the chosen formulas, not emergent behaviour."},
+ {g:"Edge AI · robotics",name:"sensorforge",chips:[["robotics"],["Metal + CUDA"],["Rust·Swift·Py"]],title:"Active-inference robot brain — Metal + CUDA, iPhone to Jetson",
+  body:"A robotics monorepo where an iPhone's ARKit sensors feed a Jetson voice assistant and a hand-written predictive-coding engine running <b>real variational-free-energy GPU kernels on both Metal and CUDA</b>, tied together with zero-copy shared-memory IPC.",
+  stats:[["2","","GPU backends"],["~13k","LOC","cross-language"]],
+  links:[["repo",GH+"sensorforge"]],
+  limit:"Every component is implemented and CI-built; a full run on physical Jetson + iPhone + rover hardware isn't provable from the repo alone."},
+ {g:"Edge AI · robotics",name:"localai",chips:[["local LLM"],["MLX"],["TUI"]],title:"Local MLX coding + vision TUI — an offline Claude fallback",
+  body:"A clean Textual terminal app that auto-spins MLX servers and streams 4-bit local Qwen/Hermes/Gemma models (text + vision) for chat and code review when you're rate-limited.",
+  stats:[["on-device","","Apple Silicon"]],
+  links:[["repo",GH+"localai"]],
+  limit:"Honest by design — local 8–14B models can't drive agentic tool-calling reliably on 16 GB, so it's deliberately human-in-the-loop."},
+ {g:"Agents · web3 · DAML",name:"01",chips:[["audit"],["Canton / DAML"]],title:"Audited Canton ticketing — with the receipts",
+  body:"A from-scratch Canton/DAML rebuild of on-chain ticketing + revenue financing, engineered for contention and adversarially audited — a <b>HIGH-severity bug found in its own code and fixed</b>, with executable attack suites behind each finding.",
+  stats:[["1","HIGH","self-found + fixed"],["8","","adversarial suites"]],
+  links:[["repo",GH+"01"]],
+  limit:"The DAML model + audit are production-shaped; the React PWA and iOS apps are partly scaffolded (separated from 'engineered' in its own HANDOFF doc)."},
+ {g:"Agents · web3 · DAML",name:"onchain-rover",chips:[["ETHGlobal 2026"],["agent"],["x402·ENS·World ID"]],title:"Give your AI agent a body",
+  body:"An ETHGlobal NYC 2026 build: a fleet of physical rovers you hire over HTTP — paid in USDC on Arc, identified by ENS + ERC-8004, gated by World ID, and governed by a human Ledger clear-signature.",
+  stats:[["6+","","wired protocol integrations"]],
+  links:[["repo",GH+"onchain-rover"]],
+  limit:"A hardware-dependent hackathon prototype; the production integration paths are real, but a DEMO_MOCK layer fills the dashboards without a physical rover."},
+ {g:"Agents · web3 · DAML",name:"socialstack",chips:[["web3"],["Celo"],["EIP-712"]],title:"On-chain rewards for real-world good",
+  body:"A Celo protocol where completing real-world missions earns attestation-signed IMPACT tokens — bounded escrow, relayer-friendly, with an epoch-bump kill-switch for a compromised attestor key.",
+  stats:[["34","/34","tests pass"]],
+  links:[["repo",GH+"socialstack"]],
+  limit:"Contracts are tested and security-reviewed; the Next.js webapp is an explicit scaffold with no contract integration yet."},
+ {g:"Agents · web3 · DAML",name:"GoblinGame",chips:[["game"],["S&box · C#"]],title:"The goblin stock-market party game",
+  body:"A chaotic 4–8 player S&box party game: launch meme tokens, shill them on in-game Twitter, manipulate the market and rug-pull your friends — with real Twitch-chat integration and a hidden 'Rugger' social-deduction role.",
+  stats:[["~14k","LOC","C# game systems"]],
+  links:[["repo",GH+"GoblinGame"]],
+  limit:"The multiplayer tycoon core is built; the 14-chapter story campaign is designed, not coded — flagged in the repo's own gap-analysis doc."},
+];
+const GROUPS=["Bridges & cross-chain","DEX · AMM · perps","ZK · FHE · cryptographic games","Systems · infra · consensus","Edge AI · robotics","Agents · web3 · DAML"];
+const research=[
+ {name:"BRIDGE-bench / anthropic-fellowship",chips:[["research"],["AI security"],["Python"]],title:"Static analysis hits 0% F1 on real bridge exploits",
+  body:"A vulnerability benchmark on real $100M+ exploit contracts (Nomad, Wormhole, Socket…) that empirically shows pattern-matching static analysis scores <b>0% F1</b>, with a Claude agentic pipeline built to do the compositional reasoning static tools can't.",
+  stats:[["0%","F1","static analysis"],["523 KB","","real contract corpus"]],
+  links:[["code",GH+"anthropic-fellowship"]],
+  limit:"The 0% static/hybrid F1 is committed and reproducible; the LLM-pipeline accuracy is demonstrated to run but not yet scored against ground truth — so no headline LLM number is claimed."},
+ {name:"mech-interp / anthropic-fellowship",chips:[["research"],["interpretability"],["TransformerLens"]],title:"Where GPT-2 reads 'not' but ignores it",
+  body:"TransformerLens replications that pinpoint the layers where GPT-2 detects negation — head <b>L11H8 attends 37.7%</b> to the 'not' token — yet fails to suppress the negated fact, with every number reproducible from committed scripts.",
+  stats:[["37.7%","","L11H8 attention"]],
+  links:[["code",GH+"anthropic-fellowship"]],
+  limit:"A faithful replication of known results (Ettinger, Truong, Berglund), labelled 'not novel' — the value is the reproducible teardown, not a new claim."},
+ {name:"gnome-materials",chips:[["research"],["ML"],["CHGNet"]],title:"Active learning on 256K crystals, 1.13× discovery boost",
+  body:"A GNoME-style pipeline running frozen CHGNet + MC-Dropout active learning across the full <b>256,963-structure</b> WBM benchmark, finding ~14% more stable materials than random screening at a 0.9% labeling budget — plus the honest finding that fine-tuning the surrogate backfires.",
+  stats:[["256,963","","structures"],["1.13×","","discovery factor"]],
+  links:[["repo",GH+"gnome-materials"]],
+  limit:"Headline numbers are paper-reported and code-regenerable (~2-hour rerun), not backed by a committed result artifact in the repo."},
+];
+const timeline=[
+ {yr:"2018",name:"reddit-bot",d:"First Reddit API bot (PRAW) — earliest public project; scripting and finance curiosity."},
+ {yr:"2019",name:"coinbasewebsocket",d:"Coinbase Pro WebSocket latency probe — first real-time market-data tooling."},
+ {yr:"2019",name:"VariableLoanAmortization",d:"Variable-rate amortization model in pandas — early quantitative-finance math."},
+ {yr:"2020",name:"dorjtoken",d:"A deployed, Etherscan-verified custom ERC-20 — first on-chain smart contract."},
+ {yr:"2022",name:"WorldOfEther",d:"Decompiled a live NFT mint contract's bytecode to study it — the reverse-engineering era."},
+];
+// ── generative schematic motifs (one per project, drawn live) ──
+function seedRnd(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^h>>>16)>>>0)/4294967296;};}
+const AM="#ff9d4d",TL="#67d4c8",GD="#ffc081";
+const MOTIF={
+ "lock-mint-bridge-lab":["bridge",AM],"cross-evm-bridge":["bridge",AM],"safexswap":["bridge",TL],"printing-money-labs":["scan",AM],
+ "quantgroup":["curve",AM],"blastperps":["gauge",AM],"cowswaprouter":["bars",TL],"marketmakehackathon":["nodes",TL],
+ "fhe-dark-chess":["board",TL],"zk-dark-chess":["board",AM],"chess":["board",GD],"satoshi_flip":["flow",TL],"dice":["flow",AM],
+ "op-stack-reth":["stack",AM],"smart-contract-audit-framework":["scan",TL],"consensus-benchmarking-suite":["nodes",AM],
+ "sensorforge":["nodes",TL],"localai":["scan",GD],
+ "01":["stack",TL],"onchain-rover":["nodes",AM],"socialstack":["nodes",TL],"GoblinGame":["flow",AM],
+ "BRIDGE-bench / anthropic-fellowship":["scan",TL],"mech-interp / anthropic-fellowship":["nodes",TL],"gnome-materials":["flow",TL],
+ "suwappu":["bridge",AM]};
+function motifFor(n){const m=MOTIF[n]||["nodes",AM];return{type:m[0],accent:m[1]};}
+function rgba(c,a){const n=parseInt(c.slice(1),16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;}
+function drawMotif(cv,type,ac,seed){
+ const dpr=Math.min(devicePixelRatio,2),w=cv.clientWidth||560,h=cv.clientHeight||280;
+ cv.width=w*dpr;cv.height=h*dpr;const x=cv.getContext('2d');x.scale(dpr,dpr);const R=seedRnd(seed);
+ x.strokeStyle=rgba(ac,.06);x.lineWidth=1;for(let i=0;i<w;i+=28){x.beginPath();x.moveTo(i,0);x.lineTo(i,h);x.stroke();}for(let j=0;j<h;j+=28){x.beginPath();x.moveTo(0,j);x.lineTo(w,j);x.stroke();}
+ x.lineWidth=1.5;x.strokeStyle=rgba(ac,.9);x.fillStyle=rgba(ac,.9);x.shadowColor=ac;x.shadowBlur=9;
+ if(type==='board'){const N=8,sz=Math.min(w,h)*0.78,cs=sz/N,ox=(w-sz)/2,oy=(h-sz)/2;
+   x.shadowBlur=0;x.strokeStyle=rgba(ac,.45);x.strokeRect(ox,oy,sz,sz);
+   for(let i=1;i<N;i++){x.beginPath();x.moveTo(ox+i*cs,oy);x.lineTo(ox+i*cs,oy+sz);x.moveTo(ox,oy+i*cs);x.lineTo(ox+sz,oy+i*cs);x.stroke();}
+   x.shadowBlur=9;for(let i=0;i<N;i++)for(let j=0;j<N;j++)if(R()<0.2){x.fillStyle=rgba(ac,.14+R()*.5);x.fillRect(ox+i*cs+2,oy+j*cs+2,cs-4,cs-4);}
+   x.fillStyle=rgba(ac,1);x.font=cs*1.05+'px serif';x.textAlign='center';x.textBaseline='middle';x.fillText('♚',ox+((R()*8|0)+.5)*cs,oy+((R()*8|0)+.5)*cs);
+ }else if(type==='curve'){const p=26;x.beginPath();for(let i=0,f=1;i<=1;i+=0.01){const px=p+i*(w-2*p),py=h-p-(h-2*p)*(0.11/(i+0.11));f?(x.moveTo(px,py),f=0):x.lineTo(px,py);}x.stroke();
+   x.shadowBlur=0;x.strokeStyle=rgba(ac,.28);x.beginPath();x.moveTo(p,p);x.lineTo(p,h-p);x.lineTo(w-p,h-p);x.stroke();
+   const i=.4,sx=p+i*(w-2*p),sy=h-p-(h-2*p)*(0.11/(i+0.11));x.shadowBlur=11;x.fillStyle=rgba(ac,1);x.beginPath();x.arc(sx,sy,4.5,0,7);x.fill();
+ }else if(type==='bridge'){const lx=w*0.17,rx=w*0.83,ty=h*0.3,by=h*0.8;
+   x.strokeStyle=rgba(ac,.45);x.beginPath();x.moveTo(lx,ty-8);x.lineTo(lx,by);x.moveTo(rx,ty-8);x.lineTo(rx,by);x.moveTo(lx,by);x.lineTo(rx,by);x.stroke();
+   x.strokeStyle=rgba(ac,.9);for(let k=0;k<3;k++){x.beginPath();x.moveTo(lx,ty+k*7);x.quadraticCurveTo(w/2,ty+22+k*12,rx,ty+k*7);x.stroke();}
+   for(let k=0;k<4;k++){const t=.2+k*.2;x.fillStyle=rgba(ac,1);x.beginPath();x.arc(lx+(rx-lx)*t,ty+22*4*(t-t*t)/(1),3.2,0,7);x.fill();}
+ }else if(type==='gauge'){const cx=w/2,cy=h*0.8,r=Math.min(w,h)*0.4;x.lineWidth=5;x.strokeStyle=rgba(ac,.16);x.beginPath();x.arc(cx,cy,r,Math.PI,2*Math.PI);x.stroke();
+   x.strokeStyle=rgba(ac,.95);x.beginPath();x.arc(cx,cy,r,Math.PI,Math.PI+Math.PI*0.9);x.stroke();
+   x.lineWidth=2;const a=Math.PI+Math.PI*0.9;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+r*0.82*Math.cos(a),cy+r*0.82*Math.sin(a));x.stroke();
+ }else if(type==='bars'){const n=7,p=26,bw=(w-2*p)/n;for(let i=0;i<n;i++){const bh=(h-2*p)*(0.32+R()*0.62);x.fillStyle=rgba(ac,.16);x.fillRect(p+i*bw+3,h-p-bh,bw-6,bh);x.strokeStyle=rgba(ac,.9);x.strokeRect(p+i*bw+3,h-p-bh,bw-6,bh);}
+ }else if(type==='stack'){const n=4,p=24,bw=w-2*p,gap=(h-2*p)/n;for(let i=0;i<n;i++){const y=p+i*gap;x.fillStyle=rgba(ac,.09+(n-i)*0.045);x.fillRect(p,y,bw,gap-7);x.strokeStyle=rgba(ac,.8);x.strokeRect(p,y,bw,gap-7);}
+ }else if(type==='scan'){const p=24,lh=15;x.shadowBlur=4;for(let y=p,i=0;y<h-p;y+=lh,i++){x.fillStyle=rgba(ac,i%4===0?.85:.28);x.fillRect(p,y,(0.18+R()*0.72)*(w-2*p),4);}x.shadowBlur=0;x.fillStyle=rgba(ac,.05);for(let y=0;y<h;y+=3)x.fillRect(0,y,w,1);x.fillStyle=rgba(ac,1);x.fillRect(p,h-p-4,9,8);
+ }else if(type==='flow'){x.lineWidth=1.4;for(let i=0;i<70;i++){const px=R()*w,py=R()*h,a=Math.sin(px*0.018)+Math.cos(py*0.02)*1.4,l=5+R()*15;x.strokeStyle=rgba(ac,.25+R()*.6);x.beginPath();x.moveTo(px,py);x.lineTo(px+Math.cos(a)*l,py+Math.sin(a)*l);x.stroke();}
+ }else{const n=7,P=[];for(let i=0;i<n;i++)P.push([26+R()*(w-52),26+R()*(h-52)]);x.strokeStyle=rgba(ac,.38);for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)if(R()<0.42){x.beginPath();x.moveTo(P[i][0],P[i][1]);x.lineTo(P[j][0],P[j][1]);x.stroke();}x.fillStyle=rgba(ac,1);P.forEach(p=>{x.beginPath();x.arc(p[0],p[1],3+R()*2,0,7);x.fill();});}
+}
+const S="assets/shots/";
+const SHOTS={
+ "suwappu":S+"suwappu.png","satoshi_flip":S+"satoshi.png","cowswaprouter":S+"cowswap.png",
+ "fhe-dark-chess":S+"fhe-onchain.png","onchain-rover":S+"rover.jpg",
+ "smart-contract-audit-framework":S+"test-smart-contract-audit-framework.png",
+ "BRIDGE-bench / anthropic-fellowship":S+"result-bridge.png",
+ "mech-interp / anthropic-fellowship":S+"result-mech.png",
+ "gnome-materials":S+"fig-gnome.png","consensus-benchmarking-suite":S+"result-consensus.png",
+ "printing-money-labs":S+"code-pml.png","op-stack-reth":S+"result-opstack.png",
+ "sensorforge":S+"code-sensorforge.png","localai":S+"code-localai.png",
+ "01":S+"code-01.png","GoblinGame":S+"code-goblin.png",
+ "lock-mint-bridge-lab":S+"test-lock-mint-bridge-lab.png","cross-evm-bridge":S+"test-cross-evm-bridge.png",
+ "safexswap":S+"test-safexswap.png","quantgroup":S+"test-quantgroup.png","blastperps":S+"test-blastperps.png",
+ "marketmakehackathon":S+"test-marketmakehackathon.png","zk-dark-chess":S+"test-zk-dark-chess.png",
+ "chess":S+"test-chess.png","dice":S+"test-dice.png","socialstack":S+"test-socialstack.png"};
+// FLUX-generated matched art covers (keep authentic product/on-chain/photo covers in SHOTS above)
+const ART={
+ "lock-mint-bridge-lab":"art-bridge.png","cross-evm-bridge":"art-crossbridge.png","safexswap":"art-safex.png",
+ "printing-money-labs":"art-pml.png","quantgroup":"art-amm.png","blastperps":"art-perps.png",
+ "marketmakehackathon":"art-arb.png","zk-dark-chess":"art-zkchess.png","chess":"art-chess.png","dice":"art-dice.png",
+ "socialstack":"art-social.png","op-stack-reth":"art-opstack.png","smart-contract-audit-framework":"art-scaudit.png",
+ "consensus-benchmarking-suite":"art-consensus.png","sensorforge":"art-robotics.png","localai":"art-localai.png",
+ "01":"art-canton.png","GoblinGame":"art-goblin.png","BRIDGE-bench / anthropic-fellowship":"art-bench.png",
+ "mech-interp / anthropic-fellowship":"art-mech.png","gnome-materials":"art-gnome.png"};
+// the real screenshots stay REACHABLE as a proof link on each art-covered card
+const PROOFIMG={
+ "lock-mint-bridge-lab":["test-lock-mint-bridge-lab.png","✓ tests"],"cross-evm-bridge":["test-cross-evm-bridge.png","✓ tests"],
+ "safexswap":["test-safexswap.png","✓ tests"],"quantgroup":["test-quantgroup.png","✓ tests"],"blastperps":["test-blastperps.png","✓ tests"],
+ "marketmakehackathon":["test-marketmakehackathon.png","✓ tests"],"zk-dark-chess":["test-zk-dark-chess.png","✓ tests"],
+ "chess":["test-chess.png","✓ tests"],"dice":["test-dice.png","✓ tests"],"socialstack":["test-socialstack.png","✓ tests"],
+ "smart-contract-audit-framework":["test-smart-contract-audit-framework.png","✓ tests"],
+ "BRIDGE-bench / anthropic-fellowship":["result-bridge.png","✓ result"],"mech-interp / anthropic-fellowship":["result-mech.png","✓ result"],
+ "consensus-benchmarking-suite":["result-consensus.png","chart"],"op-stack-reth":["result-opstack.png","make help"],
+ "gnome-materials":["fig-gnome.png","figure"],"printing-money-labs":["code-pml.png","source"],
+ "sensorforge":["code-sensorforge.png","source"],"localai":["code-localai.png","source"],"01":["code-01.png","source"],"GoblinGame":["code-goblin.png","source"]};
+function render(arr,el,feature){arr.forEach(c=>{const d=document.createElement('div');d.className='card rv'+(feature?' feature':'');
+ const m=motifFor(c.name),s0=c.stats&&c.stats[0];
+ const wp=s=>s.replace(/\.(png|jpg)$/i,'.webp');
+ const art=ART[c.name],cover=art?S+art:SHOTS[c.name];
+ const term=cover&&!art&&(cover.includes('test-')||cover.includes('result-')||cover.includes('fig-')||cover.includes('code-'));
+ const pf=PROOFIMG[c.name],links=(pf?[[pf[1],wp(S+pf[0])]]:[]).concat(c.links);
+ d.innerHTML=`<div class="cover${cover?(term?' shot tshot':' shot'):''}">${cover?`<img class="cover-img" src="${wp(cover)}" alt="${c.name}" loading="lazy" decoding="async" width="560" height="280">`:'<canvas aria-hidden="true"></canvas>'}<div class="cv-name" style="color:${m.accent}">${c.name}</div>${s0?`<div class="cv-stat"><div class="n mono">${s0[0]}<span class="u">${s0[1]}</span></div><div class="k hud">${s0[2]}</div></div>`:''}</div>
+  <div class="card-in"><div class="chips">${c.chips.map(ch=>`<span class="chip hud${ch[1]?' '+ch[1]:''}">${ch[0]}</span>`).join('')}</div>
+   <h3>${c.title}</h3><p>${c.body}</p>
+   <div class="card-links">${links.map(l=>`<a class="plink hud" href="${l[1]}" target="_blank" rel="noopener">${l[0]}<span class="arr">↗</span></a>`).join('')}</div>
+   <div class="limit mono">${c.limit}</div></div>`;
+ el.appendChild(d);if(!cover)drawMotif(d.querySelector('canvas'),m.type,m.accent,c.name);});}
+const cardsEl=document.getElementById('cards');
+GROUPS.forEach(g=>{const items=work.filter(w=>w.g===g);if(!items.length)return;
+  const h=document.createElement('div');h.className='subhead hud';h.textContent=g;cardsEl.appendChild(h);
+  render(items,cardsEl);});
+render(research,document.getElementById('researchcards'));
+const tlEl=document.getElementById('timelinelist');
+timeline.forEach(t=>{const d=document.createElement('div');d.className='tl-item rv';
+  d.innerHTML=`<div class="tl-yr mono">${t.yr}</div><h3><a href="${GH+t.name}" target="_blank" rel="noopener">${t.name} ↗</a></h3><p>${t.d}</p>`;tlEl.appendChild(d);});
+render([{name:"suwappu",chips:[["suwappu.bot — live","live"],["DEX"],["TEE custody"]],
+  title:"An agent-native cross-chain DEX — swap across 14 chains over MCP, A2A, or REST",
+  body:"The depth that proves it isn't a thin wrapper: a <b>10+ provider priority router</b> (CoW batch auctions, Jito bundles, CCTP), <b>non-custodial Turnkey TEE</b> wallets, an on-chain SUWP token with real-yield staking on Base, and three <b>published npm SDKs</b> — discoverable by other agents through a public A2A agent card.",
+  stats:[["14","","chains"],["3","","published npm SDKs"],["3","","agent surfaces: REST·MCP·A2A"]],
+  links:[["suwappu.bot","https://suwappu.bot"],["A2A agent card","https://api.suwappu.bot/.well-known/agent.json"],["@suwappu/sdk","https://www.npmjs.com/package/@suwappu/sdk"]],
+  limit:"The core engine is private; what's linked here is the public, verifiable surface — the live site, the shipping SDKs, and the on-chain contracts."}],document.getElementById('flagcard'),true);
+
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
+const mt=document.getElementById('mtog'),mtl=document.getElementById('mtog-l');
+window.__motionOff=false;
+function setMotion(off){window.__motionOff=off;document.body.classList.toggle('no-motion',off);mt.setAttribute('aria-pressed',off);mtl.textContent=off?'motion off':'motion';window.dispatchEvent(new Event('motionchange'));}
+const MOTION_KEY='motion_off_v1';
+let savedMotion=null;try{savedMotion=localStorage.getItem(MOTION_KEY);}catch(e){}
+if(savedMotion!==null)setMotion(savedMotion==='1');
+else if(matchMedia('(prefers-reduced-motion:reduce)').matches)setMotion(true);
+mt.addEventListener('click',()=>{setMotion(!window.__motionOff);try{localStorage.setItem(MOTION_KEY,window.__motionOff?'1':'0');}catch(e){}});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -5% 0px'});
+document.querySelectorAll('.rv').forEach(e=>{io.observe(e);
+  if(e.getBoundingClientRect().top<innerHeight){e.classList.add('in');io.unobserve(e);}});
+setTimeout(()=>document.querySelectorAll('.rv:not(.in)').forEach(e=>{e.classList.add('in');io.unobserve(e);}),1500);
+</script>
+
+<!-- ── CROSS-CHAIN: USDC swap (suwappu.bot) + exploit detection (BRIDGE-bench) ── -->
+<script>
+(function(){
+const cv=document.getElementById('city');const x=cv.getContext&&cv.getContext('2d');
+if(!x){cv.style.display='none';return;}
+let W,H;function resize(){const D=Math.min(devicePixelRatio,2);W=innerWidth;H=innerHeight;cv.width=W*D;cv.height=H*D;x.setTransform(D,0,0,D,0,0);}
+resize();addEventListener('resize',resize,{passive:true});
+const RND=(a,b)=>a+Math.random()*(b-a),lerp=(a,b,t)=>a+(b-a)*t,cl=(v,a,b)=>Math.max(a,Math.min(b,v)),cl01=v=>cl(v,0,1),ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const RED='240,84,60',GRN='110,231,168',AMB='255,170,90',TEAL='103,212,200',PEND='200,170,120',ICE='150,205,255',GREY='150,160,175';
+const A=(c,a)=>'rgba('+c+','+a+')';
+let g;function geo(){g={ax:W*0.13,bx:W*0.87,by:H*0.62,bbx:W*0.74,bby:H*0.84};}geo();addEventListener('resize',geo);
+let txs=[];function mk(){return{x:RND(-20,W),y:RND(0,H),vx:RND(28,62),vy:RND(-9,9),r:RND(1.4,3.4),p:Math.random()<0.14};}
+for(let i=0;i<210;i++)txs.push(mk());
+let evs=[],evT=1.0,flip=0,mx=-999,my=-999,PILLS=[];
+function spawn(){flip^=1;evs.push(flip?{k:'swap',t:0}:{k:'exp',t:0,sx:RND(W*0.36,W*0.64)});}
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});addEventListener('pointerleave',()=>{mx=my=-999;});
+function glow(cx,cy,r,c,a){x.beginPath();x.arc(cx,cy,r,0,7);x.fillStyle=A(c,a);x.fill();}
+function path(X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);}
+function pill(cx,cy,t,c,a){PILLS.push([cx,cy,t,c,a==null?1:a]);}
+function drawPill(cx,cy,t,c,al){if(al<=0.02)return;x.save();x.font='600 12px "JetBrains Mono",monospace';const tw=x.measureText(t).width,w=tw+30,h=23,X=cx-w/2,Y=cy-h/2;x.globalAlpha=al;
+ x.shadowColor='rgba(0,0,0,0.5)';x.shadowBlur=12;x.shadowOffsetY=3;path(X,Y,w,h,11);x.fillStyle='rgba(16,20,28,0.5)';x.fill();
+ x.shadowColor='transparent';x.shadowBlur=0;x.shadowOffsetY=0;
+ const lg=x.createLinearGradient(0,Y,0,Y+h);lg.addColorStop(0,'rgba(255,255,255,0.16)');lg.addColorStop(.5,'rgba(255,255,255,0)');path(X,Y,w,h,11);x.fillStyle=lg;x.fill();
+ path(X,Y,w,h,11);x.strokeStyle='rgba(255,255,255,0.2)';x.lineWidth=1;x.stroke();
+ x.beginPath();x.arc(X+13,cy,3,0,7);x.fillStyle=A(c,1);x.fill();
+ x.fillStyle=A(c,0.96);x.textAlign='left';x.textBaseline='middle';x.fillText(t,X+23,cy+0.5);x.restore();}
+function node(nx,ny,c){x.lineWidth=2;x.strokeStyle=A(c,0.75);x.beginPath();for(let i=0;i<=6;i++){const a=i/6*6.283+0.52,px=nx+Math.cos(a)*27,py=ny+Math.sin(a)*27;i?x.lineTo(px,py):x.moveTo(px,py);}x.stroke();glow(nx,ny,26,c,0.18);}
+function bridge(){x.strokeStyle=A(PEND,0.13);x.lineWidth=1;for(const o of [-7,7]){x.beginPath();x.moveTo(g.ax,g.by+o);x.lineTo(g.bx,g.by+o);x.stroke();}node(g.ax,g.by,TEAL);node(g.bx,g.by,AMB);}
+function update(dt){
+ for(const t of txs){t.x+=t.vx*dt*(t.p?2.2:1);t.y+=t.vy*dt;
+   if(mx>0){const dx=t.x-mx,dy=t.y-my,d2=dx*dx+dy*dy;if(d2<12000){const f=(1-Math.sqrt(d2)/110)*dt*60;t.x+=dx*0.02*f;t.y+=dy*0.02*f;}}
+   if(t.x>W+14){t.x=-12;t.y=RND(0,H);t.p=Math.random()<0.11;}if(t.y<-14)t.y=H+12;if(t.y>H+14)t.y=-12;}
+ evT-=dt;if(evT<=0&&evs.length<3){spawn();evT=RND(1.2,2.0);}
+ for(const e of evs){e.t+=dt;if(e.k==='exp'&&mx>0&&e.t>0.9&&e.t<1.8){const dx=e.sx-mx,dy=g.by-my;if(dx*dx+dy*dy<9000)e.t=1.85;}}
+ evs=evs.filter(e=>e.t<4.0);}
+function drawSwap(e){const t=e.t,mid=(g.ax+g.bx)/2,by=g.by,fade=t>3.2?cl01(1-(t-3.2)/0.8):1;
+ let tx,col;if(t<1.5){tx=lerp(g.ax,mid,ease(cl01(t/0.9)));col=AMB;}else{tx=lerp(mid,g.bx,ease(cl01((t-1.5)/1.1)));col=t>2.6?GRN:ICE;}
+ const cap=cl01((t-1.2)/0.4)*(t>3.0?cl01(1-(t-3.0)/0.6):1),sa=cl01((t-0.5)/0.5)*cl01(1-(t-1.2)/0.35);
+ if(sa>0.01){const clamp=lerp(46,18,cl01((t-0.5)/0.7));for(const s of [-1,1]){x.fillStyle=A(RED,0.9*sa*fade);path(tx-10,by+s*clamp-6,20,12,2);x.fill();x.strokeStyle=A(RED,0.4*sa*fade);x.lineWidth=1;x.beginPath();x.moveTo(tx,by);x.lineTo(tx,by+s*clamp);x.stroke();}pill(tx,by-48,'SANDWICH',RED,sa*fade);}
+ if(cap>0.01){x.save();x.globalAlpha=cap*fade;path(tx-24,by-16,48,32,11);x.fillStyle='rgba(150,205,255,0.07)';x.fill();path(tx-24,by-16,48,32,11);x.strokeStyle=A(ICE,0.5);x.lineWidth=1.2;x.stroke();glow(tx,by,20,ICE,0.10);x.restore();pill(tx,by-48,'suwappu.bot · MEV-protected route',ICE,cap*fade);}
+ glow(tx,by,13,col,0.6*fade);x.fillStyle=A(col,0.98*fade);x.beginPath();x.arc(tx,by,7,0,7);x.fill();
+ if(t>2.6){const pp=cl01((t-2.6)/0.5);glow(g.bx,by,26+pp*24,GRN,0.22*(1-pp)*fade);if(t>2.6&&t<3.5)pill(g.bx,by-34,'✓ settled · no sandwich',GRN,fade);}}
+function drawExp(e){const t=e.t,sx=e.sx,by=g.by,fade=t>3.2?cl01(1-(t-3.2)/0.8):1,bb=cl01((t-1.8)/0.7),col=bb>0.5?GRN:RED,pulse=0.5+0.5*Math.sin(t*9);
+ x.save();x.translate(sx,by);x.rotate(0.785);x.fillStyle=A(col,(0.7+0.2*pulse*(1-bb))*fade);path(-13,-13,26,26,3);x.fill();x.strokeStyle=A(col,0.9*fade);x.lineWidth=1.4;path(-13,-13,26,26,3);x.stroke();x.restore();glow(sx,by,24,col,0.26*fade);
+ if(bb<0.5){x.strokeStyle=A(RED,0.4*fade);x.setLineDash([3,4]);x.lineWidth=1;x.beginPath();x.moveTo(sx,by-12);x.lineTo(sx,by-34);x.stroke();x.setLineDash([]);glow(sx,by-38,4,RED,0.6*fade);}
+ if(t<0.95)pill(sx,by-54,'BRIDGE EXPLOIT',RED,fade);
+ if(t>0.8&&t<1.9){const scanX=lerp(0,W,ease(cl01((t-0.8)/1.0)));x.strokeStyle=A(GREY,0.5);x.lineWidth=1;x.beginPath();x.moveTo(scanX,by-72);x.lineTo(scanX,by+72);x.stroke();if(Math.abs(scanX-sx)<70)pill(sx,by-54,'static analysis · 0% F1',GREY,fade*0.9);}
+ if(t>1.8){for(let i=0;i<6;i++){const pr=cl01(bb-i*0.05),px=lerp(g.bbx,sx,ease(pr)),py=lerp(g.bby,by,ease(pr));glow(px,py,3.4,GRN,0.8*fade*(pr<1?1:0.3));}const ps=lerp(46,21,ease(bb));x.strokeStyle=A(GRN,0.9*bb*fade);x.lineWidth=2;x.strokeRect(sx-ps,by-ps,ps*2,ps*2);if(bb>0.2)pill(sx,by-54,'BRIDGE-bench · detected ✓',GRN,fade);}}
+function paint(){PILLS.length=0;x.globalCompositeOperation='lighter';
+ for(const t of txs){x.beginPath();x.arc(t.x,t.y,t.r,0,7);x.fillStyle=A(t.p?RED:PEND,t.p?0.7:0.45);x.fill();if(t.p)glow(t.x,t.y,t.r+3.5,RED,0.16);}
+ bridge();for(const e of evs){e.k==='swap'?drawSwap(e):drawExp(e);}
+ if(mx>0){x.strokeStyle=A(GRN,0.4);x.lineWidth=1.4;x.beginPath();x.arc(mx,my,46,0,7);x.stroke();glow(mx,my,46,GRN,0.04);}
+ x.globalCompositeOperation='source-over';for(const p of PILLS)drawPill(p[0],p[1],p[2],p[3],p[4]);}
+function render(){x.globalCompositeOperation='source-over';x.fillStyle='rgba(8,9,12,0.30)';x.fillRect(0,0,W,H);paint();}
+let last=0,running=false,heroVisible=true,raf=0;const hero=document.getElementById('top');
+function loop(ts){if(!running){raf=0;return;}const dt=Math.min(0.05,((ts-last)||16)/1000);last=ts;update(dt);render();raf=requestAnimationFrame(loop);}
+function go(){if(window.__motionOff)return still();running=true;last=0;if(!raf)raf=requestAnimationFrame(loop);}
+function stop(){running=false;if(raf)cancelAnimationFrame(raf);raf=0;}
+function still(){running=false;if(raf)cancelAnimationFrame(raf);raf=0;if(!evs.length){evs.push({k:'swap',t:1.45});evs.push({k:'exp',t:2.3,sx:W*0.5});}x.fillStyle='rgba(8,9,12,1)';x.fillRect(0,0,W,H);paint();}
+new IntersectionObserver(es=>{heroVisible=es[0].isIntersecting;heroVisible?go():stop();},{threshold:.02}).observe(hero);
+document.addEventListener('visibilitychange',()=>{document.hidden?stop():(heroVisible&&go());});
+addEventListener('motionchange',()=>{window.__motionOff?still():(heroVisible&&go());});
+if(window.__motionOff)still();else go();
+})();
+</script>
+</body>
+</html>
