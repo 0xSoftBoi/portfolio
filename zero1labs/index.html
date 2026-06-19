@@ -3,479 +3,361 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ZERO-1 LABS // research & build holding company</title>
-<meta name="description" content="Zero-1 Labs is a research-and-build holding company taking ideas 0→1 across crypto, security, AI, robotics, materials, and gaming. Every venture links to a primary source you can verify.">
+<title>Zero-1 Labs</title>
+<meta name="description" content="Zero-1 Labs — a research-and-build holding company taking ideas from zero to one across crypto, security, AI, robotics, materials and gaming.">
+<meta name="theme-color" content="#070707">
 <meta property="og:title" content="Zero-1 Labs">
-<meta property="og:description" content="A research-and-build holding company taking ideas 0→1 — crypto, security, AI, robotics, materials, gaming. Built in public, every claim verifiable.">
+<meta property="og:description" content="A research-and-build holding company taking ideas from zero to one — crypto, security, AI, robotics, materials, gaming. Built in public, every claim verifiable.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="assets/hero.webp">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23070707'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%23ff9d4d' text-anchor='middle'%3E0%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/hero.webp">
 <style>
 :root{
-  --bg:#08080a; --bg-1:#0d0e12; --bg-2:#121419; --bg-3:#181b22;
-  --line:#211f1c; --line-1:#37322c;
-  --ink:#ece5db; --dim:#a79c8d; --faint:#8a8174;
-  --amber:#ff9d4d; --amber2:#ffc081; --amber-d:rgba(255,157,77,.10); --amber-b:rgba(255,157,77,.42);
-  --teal:#67d4c8; --teal2:#9fe8df; --teal-d:rgba(103,212,200,.10); --teal-b:rgba(103,212,200,.38);
-  --warn:#e8c45a; --warn-d:rgba(232,196,90,.10);
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  --hud:'Rajdhani',var(--mono);
-  --display:'Orbitron',var(--hud);
+  --bg:#070707; --bg-2:#0c0b0a;
+  --ink:#f3eee5; --dim:#b6aea1; --faint:#8a8378;
+  --line:rgba(243,238,229,.12); --line-2:rgba(243,238,229,.06);
+  --accent:#ff9d4d; --accent-2:#ffc081; --teal:#7fd8cd;
+  --serif:'Fraunces',Georgia,serif;
   --sans:'Inter',system-ui,sans-serif;
-  --maxw:1180px;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --maxw:1280px; --pad:clamp(22px,5vw,76px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-.mono{font-family:var(--mono)} .hud{font-family:var(--hud)}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 30px}
+img{display:block;max-width:100%}
+.mono{font-family:var(--mono)}
+.serif{font-family:var(--serif)}
 
-/* ── cinematic overlays ── */
-.fx{position:fixed;inset:0;pointer-events:none;z-index:90}
-.fx-scan{background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.13) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;opacity:.4}
-.fx-grain{opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .5s steps(2) infinite}
-@keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-4%,3%)}100%{transform:translate(3%,-2%)}}
-.fx-vig{background:radial-gradient(ellipse 130% 115% at 50% 40%,transparent 50%,rgba(0,0,0,.6) 100%)}
-.frame{position:fixed;z-index:91;width:24px;height:24px;border:1px solid var(--amber-b);pointer-events:none;opacity:.5}
-.frame.tl{top:14px;left:14px;border-right:0;border-bottom:0}.frame.tr{top:14px;right:14px;border-left:0;border-bottom:0}
-.frame.bl{bottom:14px;left:14px;border-right:0;border-top:0}.frame.br{bottom:14px;right:14px;border-left:0;border-top:0}
-
-body.no-motion .fx-grain,body.no-motion .blink,body.no-motion .dot.live,body.no-motion .scroll-cue .ln{animation:none!important}
-@media(prefers-reduced-motion:reduce){.fx-grain,.blink,.dot.live,.scroll-cue .ln{animation:none!important}.rv{opacity:1!important;transform:none!important}}
-.mtog{font-family:var(--hud);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-1);padding:5px 9px;cursor:pointer;background:transparent;transition:.18s;display:inline-flex;align-items:center;gap:7px}
-.mtog:hover{color:var(--amber);border-color:var(--amber-b)}
-.mtog i{width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber);font-style:normal}
-body.no-motion .mtog i{background:var(--faint);box-shadow:none}
+/* ── cinematic framing ── */
+.bars{position:fixed;left:0;right:0;z-index:80;height:clamp(18px,3.4vh,40px);pointer-events:none;background:var(--bg)}
+.bars.t{top:0;box-shadow:0 14px 26px -8px rgba(0,0,0,.8)}
+.bars.b{bottom:0;box-shadow:0 -14px 26px -8px rgba(0,0,0,.8)}
+.grain{position:fixed;inset:0;z-index:79;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .6s steps(2) infinite}
+@keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-3%,2%)}100%{transform:translate(2%,-3%)}}
+body.no-motion .grain{animation:none}
 
 /* ── nav ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:60;backdrop-filter:blur(9px);background:linear-gradient(180deg,rgba(8,8,10,.85),rgba(8,8,10,.2));border-bottom:1px solid transparent;transition:border-color .3s}
-.nav.scrolled{border-color:var(--line)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-.nav .brand{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:2px}
-.nav .brand b{color:var(--amber);text-shadow:0 0 14px var(--amber-b)}
-.nav .brand .sq{width:9px;height:9px;border:1.5px solid var(--amber);margin-right:9px;transform:rotate(45deg);box-shadow:0 0 9px var(--amber-b)}
-.nav .links{display:flex;align-items:center;gap:22px;font-family:var(--hud);font-size:13.5px;letter-spacing:.05em;color:var(--dim);text-transform:uppercase}
-.nav .links a{transition:color .2s}
-.nav .links a:hover{color:var(--amber);text-shadow:0 0 10px var(--amber-b)}
-@media(max-width:880px){.nav .links a:not(.keep){display:none}}
+.nav{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;align-items:center;justify-content:space-between;
+  padding:0 var(--pad);height:clamp(58px,9vh,84px);transition:opacity .5s var(--ease),transform .5s var(--ease);mix-blend-mode:difference}
+.nav.hide{opacity:0;transform:translateY(-100%)}
+.brand{font-family:var(--serif);font-weight:400;font-size:19px;letter-spacing:.02em;color:#fff}
+.brand .z{font-style:italic}
+.brand b{color:#fff;font-weight:600}
+.nav-links{display:flex;gap:clamp(14px,2.4vw,30px);font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.nav-links a{opacity:.7;transition:opacity .25s}
+.nav-links a:hover{opacity:1}
+@media(max-width:760px){.nav-links a:not(.keep){display:none}}
 
-/* ── hero ── */
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:130px 0 110px;overflow:hidden;
-  background:radial-gradient(ellipse 90% 60% at 50% 100%,rgba(255,120,40,.16),transparent 62%),
-             radial-gradient(ellipse 70% 60% at 50% 12%,rgba(40,70,76,.34),transparent 72%),
-             linear-gradient(180deg,#0a0e11 0%,#0a0908 56%,#08080a 100%)}
-#field{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
-.hero-fade{position:absolute;left:0;right:0;bottom:0;height:18%;z-index:1;background:linear-gradient(transparent,var(--bg));pointer-events:none}
-.hero .wrap{position:relative;z-index:3}
-.kicker{font-family:var(--hud);font-size:14px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--amber2);margin-bottom:30px;display:flex;align-items:center;gap:12px;text-shadow:0 0 18px rgba(255,157,77,.4)}
-.kicker .blink{width:8px;height:8px;background:var(--amber);border-radius:1px;box-shadow:0 0 12px var(--amber);animation:bk 1.4s steps(1) infinite}
-@keyframes bk{50%{opacity:.2}}
-.kicker .ln{width:42px;height:1px;background:var(--amber-b)}
-.hwrd{font-family:var(--display);font-size:clamp(2.6rem,9vw,6.6rem);line-height:.96;font-weight:800;letter-spacing:.005em;text-transform:uppercase;text-shadow:0 2px 40px rgba(0,0,0,.6)}
-.hwrd .one{color:var(--amber);text-shadow:0 0 34px var(--amber-b)}
-.hwrd .l2{display:block;color:var(--faint);-webkit-text-stroke:1px var(--line-1);font-size:.42em;letter-spacing:.18em;margin-top:14px}
-.hero .lede{font-size:clamp(1.05rem,2.1vw,1.4rem);color:var(--dim);max-width:50ch;margin:34px 0 0;line-height:1.55}
-.hero .lede b{color:var(--ink);font-weight:600}
-.hero .lede .hl{color:var(--amber2);font-weight:500;text-shadow:0 0 16px var(--amber-d)}
-.hero .lede .tl{color:var(--teal2);font-weight:500}
-.proofbar{position:relative;z-index:3;margin-top:46px;display:flex;flex-wrap:wrap;gap:11px}
-.badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--hud);font-size:13.5px;font-weight:500;letter-spacing:.03em;color:var(--dim);
-  border:1px solid var(--line-1);background:rgba(13,14,18,.55);backdrop-filter:blur(5px);padding:9px 14px;clip-path:polygon(0 0,100% 0,100% 68%,calc(100% - 9px) 100%,0 100%);transition:.18s}
-.badge:hover{border-color:var(--amber-b);color:var(--ink);box-shadow:0 0 24px -5px var(--amber-b);transform:translateY(-2px)}
-.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px var(--amber-d),0 0 9px var(--amber)}
-.badge .dot.teal{background:var(--teal);box-shadow:0 0 0 3px var(--teal-d),0 0 9px var(--teal)}
-.badge .dot.live{animation:pulse 2.3s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 3px var(--amber-d),0 0 9px var(--amber)}50%{box-shadow:0 0 0 7px rgba(255,157,77,.04),0 0 4px var(--amber)}}
-.badge b{color:var(--ink);font-weight:600}.badge .arr{color:var(--faint)}
-.scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;font-family:var(--hud);font-size:12px;letter-spacing:.3em;color:var(--faint);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:9px}
-.scroll-cue .ln{width:1px;height:34px;background:linear-gradient(var(--amber),transparent);animation:cue 2s ease-in-out infinite}
-@keyframes cue{0%,100%{opacity:.25}50%{opacity:1}}
+.mtog{position:fixed;bottom:calc(clamp(18px,3.4vh,40px) + 16px);right:var(--pad);z-index:78;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);background:rgba(7,7,7,.5);backdrop-filter:blur(6px);border:1px solid var(--line);padding:7px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.25s}
+.mtog:hover{color:var(--ink);border-color:var(--line)}
+.mtog i{width:5px;height:5px;border-radius:50%;background:var(--accent);font-style:normal;transition:.25s}
+body.no-motion .mtog i{background:var(--faint)}
 
-/* ── sections ── */
-.sec{padding:92px 0;border-top:1px solid var(--line);position:relative;background:var(--bg)}
-.sec::before{content:"";position:absolute;top:-1px;left:0;width:78px;height:2px;background:var(--amber);box-shadow:0 0 14px var(--amber-b)}
-.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
-.sec-num{font-family:var(--hud);font-size:14px;font-weight:600;color:var(--amber);letter-spacing:.1em}
-.sec h2{font-family:var(--sans);font-size:clamp(1.55rem,3vw,2.25rem);font-weight:800;letter-spacing:-.02em;text-transform:uppercase}
-.sec-sub{color:var(--dim);max-width:66ch;margin:14px 0 44px;font-size:15.5px}
-.sec-sub .warnword{color:var(--warn)}
-.sec-sub b{color:var(--ink);font-weight:600}
+/* ── hero / title sequence ── */
+.hero{position:relative;height:100vh;min-height:600px;overflow:hidden;display:flex;align-items:flex-end}
+.hero-img{position:absolute;inset:-6% -2%;width:104%;height:112%;object-fit:cover;object-position:center;z-index:0;
+  animation:kb 28s var(--ease) infinite alternate;filter:saturate(1.05) contrast(1.04)}
+@keyframes kb{from{transform:scale(1.04) translate3d(0,0,0)}to{transform:scale(1.14) translate3d(-1.5%,-2%,0)}}
+body.no-motion .hero-img{animation:none;transform:scale(1.04)}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;
+  background:radial-gradient(ellipse 90% 70% at 50% 30%,transparent,rgba(7,7,7,.35) 70%),linear-gradient(180deg,rgba(7,7,7,.5) 0%,transparent 26%,transparent 48%,rgba(7,7,7,.86) 92%,var(--bg))}
+.hero-in{position:relative;z-index:2;width:100%;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad) clamp(60px,12vh,130px)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent-2);margin-bottom:clamp(18px,3vh,30px);
+  display:flex;align-items:center;gap:14px}
+.eyebrow .ln{width:46px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+.title{font-family:var(--serif);font-weight:300;font-size:clamp(3.2rem,12vw,9.5rem);line-height:.92;letter-spacing:-.02em;color:#fff;text-shadow:0 4px 60px rgba(0,0,0,.5)}
+.title .zero{font-style:italic;font-weight:400}
+.title .one{font-style:normal;color:var(--accent);font-weight:400}
+.title .labs{display:block;font-size:.42em;letter-spacing:.04em;font-weight:300;color:rgba(243,238,229,.82);margin-top:.12em}
+.hero-lede{font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(1.15rem,2.6vw,1.8rem);line-height:1.45;color:var(--dim);max-width:30ch;margin-top:clamp(26px,4vh,40px)}
+.hero-lede em{color:var(--ink);font-style:normal;font-weight:400}
+.cue{position:absolute;left:50%;bottom:clamp(20px,4vh,38px);transform:translateX(-50%);z-index:3;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(243,238,229,.5);display:flex;flex-direction:column;align-items:center;gap:10px}
+.cue .ln{width:1px;height:38px;background:linear-gradient(rgba(243,238,229,.7),transparent);animation:cue 2.4s var(--ease) infinite}
+@keyframes cue{0%,100%{opacity:.2;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+body.no-motion .cue .ln{animation:none}
 
-/* ── thesis row ── */
-.thesis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:820px){.thesis{grid-template-columns:1fr}}
-.th{border:1px solid var(--line);background:linear-gradient(160deg,var(--bg-1),var(--bg));padding:24px 22px;position:relative;overflow:hidden;
-  clip-path:polygon(0 0,100% 0,100% calc(100% - 13px),calc(100% - 13px) 100%,0 100%)}
-.th .vb{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.18em;color:var(--amber);text-transform:uppercase}
-.th h3{font-family:var(--sans);font-size:1.2rem;font-weight:800;margin:12px 0 8px;letter-spacing:-.01em}
-.th p{color:var(--dim);font-size:14px;line-height:1.55}
+/* ── logline ── */
+.logline{max-width:var(--maxw);margin:0 auto;padding:clamp(110px,20vh,220px) var(--pad)}
+.logline p{font-family:var(--serif);font-weight:300;font-size:clamp(1.7rem,4.6vw,3.5rem);line-height:1.28;letter-spacing:-.015em;color:var(--ink);max-width:20ch}
+.logline .mut{color:var(--faint)}
+.logline em{font-style:italic;color:var(--accent-2)}
+.logline .meta{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:clamp(28px,5vh,52px);display:flex;align-items:center;gap:14px}
+.logline .meta .ln{width:40px;height:1px;background:var(--line)}
 
-/* ── verticals matrix ── */
-.matrix{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-@media(max-width:820px){.matrix{grid-template-columns:1fr}}
-.vert{border:1px solid var(--line);background:linear-gradient(165deg,var(--bg-1),var(--bg));border-radius:3px;position:relative;overflow:hidden;transition:.2s;display:flex;flex-direction:column;
-  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%)}
-.vert::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--accent,var(--amber)),transparent);opacity:.8}
-.vert:hover{border-color:var(--line-1);box-shadow:0 0 46px -16px var(--accent,var(--amber-b));transform:translateY(-2px)}
-.vert .vtop{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:22px 24px 4px}
-.vert .vname{font-family:var(--hud);font-size:1.28rem;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--accent,var(--amber))}
-.vert .vidx{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.1em;padding-top:6px}
-.vert .vdesc{color:var(--dim);font-size:14px;padding:6px 24px 16px;line-height:1.56}
-.vert .vdesc b{color:var(--ink);font-weight:600}
-.vlist{border-top:1px solid var(--line);margin-top:auto;display:flex;flex-direction:column}
-.vrow{display:flex;align-items:center;gap:12px;padding:11px 24px;border-bottom:1px solid rgba(33,31,28,.6);transition:.15s;position:relative}
-.vrow:last-child{border-bottom:0}
-.vrow:hover{background:rgba(255,255,255,.02)}
-.vrow .vr-name{font-family:var(--mono);font-size:12.5px;color:var(--amber2);font-weight:700;white-space:nowrap}
-.vrow .vr-desc{font-size:12.5px;color:var(--dim);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.vrow .vr-tag{font-family:var(--hud);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--line-1);color:var(--faint);white-space:nowrap}
-.vrow .vr-tag.live{color:var(--teal);border-color:var(--teal-b);box-shadow:0 0 12px -4px var(--teal-b)}
-.vrow .vr-tag.explore{color:var(--warn);border-color:rgba(232,196,90,.4)}
-.vrow .arr{color:var(--faint);transition:.15s}
-.vrow:hover .arr{color:var(--accent,var(--amber));transform:translateX(2px)}
+/* ── chapter panels ── */
+.panel{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end}
+.panel-img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;object-position:center;z-index:0;
+  will-change:transform;filter:saturate(1.02) contrast(1.03) brightness(.92)}
+.panel::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(7,7,7,.5) 0,transparent 22%,transparent 40%,rgba(7,7,7,.78) 84%,var(--bg)),
+             linear-gradient(90deg,rgba(7,7,7,.7) 0,rgba(7,7,7,.15) 46%,transparent 70%)}
+.panel-in{position:relative;z-index:2;width:100%;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad) clamp(54px,9vh,104px)}
+.ch-no{font-family:var(--mono);font-size:12.5px;letter-spacing:.26em;color:var(--accent-2);margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.ch-no .ln{width:34px;height:1px;background:var(--accent);opacity:.6}
+.ch-title{font-family:var(--serif);font-weight:300;font-size:clamp(2.4rem,7vw,5rem);line-height:.98;letter-spacing:-.02em;color:#fff;text-shadow:0 3px 40px rgba(0,0,0,.55)}
+.ch-line{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.1rem,2.4vw,1.6rem);color:var(--dim);max-width:34ch;margin-top:18px;line-height:1.42}
+.ch-body{font-size:clamp(.95rem,1.6vw,1.08rem);color:var(--dim);max-width:48ch;margin-top:16px;line-height:1.62}
+.ch-body b{color:var(--ink);font-weight:600}
+.ventures{margin-top:clamp(26px,4vh,40px);border-top:1px solid var(--line);max-width:620px}
+.v{display:flex;align-items:baseline;gap:16px;padding:13px 2px;border-bottom:1px solid var(--line-2);transition:padding-left .35s var(--ease);position:relative}
+.v:hover{padding-left:12px}
+.v::before{content:"";position:absolute;left:0;top:50%;width:0;height:1px;background:var(--accent);transition:width .35s var(--ease);transform:translateY(-50%)}
+.v:hover::before{width:6px}
+.v-name{font-family:var(--mono);font-size:13.5px;color:var(--accent-2);font-weight:500;min-width:max-content}
+.v-desc{font-size:13.5px;color:var(--dim);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);padding:2px 7px;white-space:nowrap}
+.v-tag.live{color:var(--teal);border-color:rgba(127,216,205,.4)}
+.v-tag.explore{color:var(--accent-2);border-color:rgba(255,192,129,.32)}
+.v .arr{font-family:var(--mono);font-size:13px;color:var(--faint);transition:transform .35s var(--ease),color .25s}
+.v:hover .arr{color:var(--accent);transform:translateX(3px)}
 
-/* ── flagship cards ── */
-.flags{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-@media(max-width:820px){.flags{grid-template-columns:1fr}}
-.flag{border:1px solid var(--line);background:linear-gradient(180deg,var(--bg-1),var(--bg));position:relative;overflow:hidden;display:flex;flex-direction:column;transition:.2s;
-  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))}
-.flag:hover{border-color:var(--line-1);box-shadow:0 0 50px -18px var(--accent,var(--amber-b))}
-.flag .cover{position:relative;width:100%;aspect-ratio:16/7;background:#070809;border-bottom:1px solid var(--line);overflow:hidden}
-.flag canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.flag .cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 46%,rgba(7,8,9,.92));z-index:1}
-.flag .cv-name{position:absolute;left:18px;bottom:12px;z-index:2;font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:.02em;text-shadow:0 2px 16px #000}
-.flag .in{padding:16px 20px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
-.flag .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-family:var(--hud);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line-1);padding:3px 9px}
-.chip.live{color:var(--teal);border-color:var(--teal-b);box-shadow:0 0 12px -4px var(--teal-b)}
-.flag h3{font-family:var(--sans);font-size:1.18rem;font-weight:800;letter-spacing:-.01em;line-height:1.2;margin:0}
-.flag p{font-size:13.5px;color:var(--dim);margin:0}
-.flag p b{color:var(--ink);font-weight:600}
-.flag .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:4px}
-.plink{font-family:var(--hud);font-size:13px;font-weight:500;letter-spacing:.03em;color:var(--dim);border:1px solid var(--line-1);padding:6px 12px;transition:.16s;display:inline-flex;gap:7px;align-items:center}
-.plink:hover{color:var(--ink);border-color:var(--amber-b);background:var(--amber-d);box-shadow:0 0 18px -6px var(--amber-b)}
-.plink .arr{color:var(--faint)}
+/* ── ledger interstitial ── */
+.ledger{position:relative;overflow:hidden;padding:clamp(110px,20vh,200px) 0}
+.ledger-img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;object-position:center;z-index:0;opacity:.42;will-change:transform;filter:saturate(.9) contrast(1.05)}
+.ledger::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,var(--bg),rgba(7,7,7,.55) 30%,rgba(7,7,7,.55) 70%,var(--bg))}
+.ledger-in{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.ledger h2{font-family:var(--serif);font-weight:300;font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.18;letter-spacing:-.015em;max-width:22ch}
+.ledger h2 em{font-style:italic;color:var(--accent-2)}
+.figs{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,3vw,40px);margin-top:clamp(40px,7vh,72px);border-top:1px solid var(--line);padding-top:clamp(30px,5vh,50px)}
+@media(max-width:680px){.figs{grid-template-columns:repeat(2,1fr);gap:28px}}
+.fig .n{font-family:var(--serif);font-weight:300;font-size:clamp(2.6rem,5.5vw,4rem);line-height:1;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fig .n .u{font-size:.34em;color:var(--accent);font-family:var(--mono);letter-spacing:0;vertical-align:.4em;margin-left:.1em}
+.fig .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-top:14px;line-height:1.5}
 
-/* ── stats strip ── */
-.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);background:var(--bg-1)}
-@media(max-width:680px){.strip{grid-template-columns:repeat(2,1fr)}}
-.stat{padding:26px 22px;border-right:1px solid var(--line);position:relative}
-.stat:last-child{border-right:0}
-@media(max-width:680px){.stat:nth-child(2){border-right:0}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
-.stat .n{font-family:var(--mono);font-size:2rem;font-weight:700;color:var(--ink);line-height:1}
-.stat .n .u{font-size:.85rem;color:var(--amber)}
-.stat .k{font-family:var(--hud);font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin-top:9px}
-
-/* ── about / founder ── */
-.about{display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:start}
-@media(max-width:820px){.about{grid-template-columns:1fr}}
-.about p{color:var(--dim);font-size:15.5px;margin-bottom:16px;max-width:62ch}
-.about p b{color:var(--ink);font-weight:600}
-.about .hl{color:var(--amber2)}
-.fcard{border:1px solid var(--line);background:linear-gradient(160deg,var(--bg-1),var(--bg));padding:24px;clip-path:polygon(0 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%)}
-.fcard .role{font-family:var(--hud);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
-.fcard .nm{font-family:var(--display);font-size:1.25rem;font-weight:700;margin:8px 0 4px;letter-spacing:.01em}
-.fcard .alias{font-family:var(--mono);font-size:12.5px;color:var(--teal2);margin-bottom:14px}
-.fcard .frow{display:flex;flex-direction:column;gap:9px}
-.fcard a{font-family:var(--hud);font-size:13.5px;color:var(--dim);display:flex;align-items:center;gap:9px;transition:.15s}
-.fcard a:hover{color:var(--amber)}
-.fcard a .arr{margin-left:auto;color:var(--faint)}
+/* ── about ── */
+.about{max-width:var(--maxw);margin:0 auto;padding:clamp(100px,16vh,180px) var(--pad);display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(40px,7vw,96px);align-items:start}
+@media(max-width:820px){.about{grid-template-columns:1fr;gap:48px}}
+.about .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-2);margin-bottom:30px;display:flex;align-items:center;gap:14px}
+.about .lbl .ln{width:40px;height:1px;background:var(--line)}
+.about p{font-family:var(--serif);font-weight:300;font-size:clamp(1.15rem,2.1vw,1.5rem);line-height:1.5;color:var(--dim);margin-bottom:22px}
+.about p b{color:var(--ink);font-weight:400}
+.about p em,.about a.ulink{font-style:italic;color:var(--accent-2)}
+.about a.ulink{border-bottom:1px solid rgba(255,192,129,.3);transition:border-color .25s}
+.about a.ulink:hover{border-color:var(--accent-2)}
+.fcard{border:1px solid var(--line);padding:clamp(24px,3vw,34px);background:linear-gradient(160deg,var(--bg-2),transparent)}
+.fcard .role{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.fcard .nm{font-family:var(--serif);font-weight:300;font-size:1.6rem;margin:12px 0 2px;letter-spacing:-.01em}
+.fcard .alias{font-family:var(--mono);font-size:12.5px;color:var(--teal);margin-bottom:24px}
+.fcard .frow{display:flex;flex-direction:column}
+.fcard a.fl{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--dim);display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line-2);transition:.25s}
+.fcard a.fl:first-of-type{border-top:0}
+.fcard a.fl:hover{color:var(--accent);padding-left:6px}
+.fcard a.fl .arr{margin-left:auto;color:var(--faint)}
 
 /* ── contact ── */
-.cta{border:1px solid var(--amber-b);background:linear-gradient(160deg,rgba(255,157,77,.06),transparent);padding:40px 34px;text-align:center;
-  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
-.cta h3{font-family:var(--sans);font-size:1.7rem;font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
-.cta p{color:var(--dim);max-width:52ch;margin:0 auto 24px}
-.cta .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn{font-family:var(--hud);font-size:14.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:13px 22px;transition:.18s;display:inline-flex;align-items:center;gap:10px}
-.btn.pri{color:var(--bg);background:var(--amber);box-shadow:0 0 28px -6px var(--amber-b);clip-path:polygon(0 0,100% 0,100% 70%,calc(100% - 11px) 100%,0 100%)}
-.btn.pri:hover{background:var(--amber2)}
-.btn.sec{color:var(--dim);border:1px solid var(--line-1)}
-.btn.sec:hover{color:var(--ink);border-color:var(--amber-b)}
+.contact{position:relative;text-align:center;padding:clamp(110px,20vh,200px) var(--pad);border-top:1px solid var(--line)}
+.contact .eb{font-family:var(--mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-2);margin-bottom:26px}
+.contact h3{font-family:var(--serif);font-weight:300;font-size:clamp(2.2rem,6vw,4.4rem);line-height:1.05;letter-spacing:-.02em;max-width:16ch;margin:0 auto 18px}
+.contact h3 em{font-style:italic;color:var(--accent-2)}
+.contact p{color:var(--dim);max-width:46ch;margin:0 auto clamp(34px,5vh,48px)}
+.cbtns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;padding:15px 26px;transition:.3s var(--ease);display:inline-flex;align-items:center;gap:10px}
+.btn.pri{color:var(--bg);background:var(--ink);border:1px solid var(--ink)}
+.btn.pri:hover{background:var(--accent);border-color:var(--accent)}
+.btn.sec{color:var(--dim);border:1px solid var(--line)}
+.btn.sec:hover{color:var(--ink);border-color:var(--ink)}
 
 /* ── footer ── */
-.foot{border-top:1px solid var(--line);padding:46px 0;color:var(--faint);font-family:var(--hud);font-size:13.5px;letter-spacing:.03em;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px}
-.foot a:hover{color:var(--amber)}
-.foot .reg{font-family:var(--mono);font-size:11px;color:var(--line-1)}
-.rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}.rv.in{opacity:1;transform:none}
-a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.foot{max-width:var(--maxw);margin:0 auto;padding:42px var(--pad) calc(clamp(18px,3.4vh,40px) + 34px);display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--faint);border-top:1px solid var(--line-2)}
+.foot a{transition:color .25s}.foot a:hover{color:var(--accent)}
+
+/* ── reveal ── */
+.rv{opacity:0;transform:translateY(26px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1!important;transform:none!important}.hero-img,.panel-img,.ledger-img{animation:none!important}.grain{animation:none}}
+a:focus-visible,button:focus-visible{outline:1.5px solid var(--accent);outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--ink);color:var(--bg);padding:10px 16px;font-family:var(--mono);font-size:12px}
+.skip:focus{left:var(--pad);top:calc(clamp(18px,3.4vh,40px) + 8px)}
 </style>
 </head>
 <body>
-
-<div class="fx fx-grain"></div><div class="fx fx-scan"></div><div class="fx fx-vig"></div>
-<span class="frame tl"></span><span class="frame tr"></span><span class="frame bl"></span><span class="frame br"></span>
+<a class="skip" href="#crypto">Skip to portfolio</a>
+<div class="bars t"></div><div class="bars b"></div>
+<div class="grain" aria-hidden="true"></div>
 
 <nav class="nav" id="nav">
-  <div class="wrap">
-    <a class="brand" href="#top"><span class="sq"></span>ZERO<b>-1</b>&nbsp;LABS</a>
-    <div class="links hud">
-      <a href="#thesis">thesis</a>
-      <a href="#verticals">verticals</a>
-      <a href="#flagship">ventures</a>
-      <a href="#about">about</a>
-      <a class="keep" href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">github↗</a>
-      <button class="mtog keep" id="mtog" aria-pressed="false" title="Pause / resume motion"><i></i><span id="mtog-l">motion</span></button>
-    </div>
+  <a class="brand" href="#top"><span class="z">Zero</span><b>-1</b> Labs</a>
+  <div class="nav-links">
+    <a href="#portfolio">portfolio</a>
+    <a href="#about">about</a>
+    <a class="keep" href="#contact">contact</a>
   </div>
 </nav>
+<button class="mtog" id="mtog" aria-pressed="false" title="Pause / resume motion"><i></i><span id="mtog-l">motion</span></button>
 
 <header class="hero" id="top">
-  <canvas id="field" aria-hidden="true"></canvas>
-  <div class="hero-fade"></div>
-  <div class="wrap">
-    <div class="kicker hud"><span class="blink"></span>RESEARCH &amp; BUILD HOLDING CO.<span class="ln"></span>EST. 2026</div>
-    <h1 class="hwrd">ZERO<span class="one">-1</span> LABS<span class="l2">zero to one, on purpose</span></h1>
-    <p class="lede">A holding company for the things I build and break. We take ideas <b>0&nbsp;→&nbsp;1</b> across <span class="hl">crypto, security, AI, robotics, materials, and gaming</span> — then ship them in public. <span class="tl">Every venture links to a primary source you can verify yourself.</span></p>
-    <div class="proofbar">
-      <a class="badge" href="https://suwappu.bot" target="_blank" rel="noopener"><span class="dot teal live"></span><b>SUWAPPU.BOT</b> // LIVE<span class="arr">↗</span></a>
-      <a class="badge" href="https://github.com/0xSoftBoi/onchain-rover" target="_blank" rel="noopener"><span class="dot"></span>ONCHAIN ROVER // <b>ETHGLOBAL NYC</b><span class="arr">↗</span></a>
-      <a class="badge" href="https://github.com/0xSoftBoi" target="_blank" rel="noopener"><span class="dot"></span><b>30+</b> PUBLIC REPOS<span class="arr">↗</span></a>
-      <a class="badge" href="https://www.linkedin.com/company/zero-1-labs/" target="_blank" rel="noopener"><span class="dot"></span>LINKEDIN<span class="arr">↗</span></a>
-    </div>
+  <img class="hero-img" src="assets/hero.webp" alt="Two illuminated arches receding into fog above a dark road — the path from zero to one." fetchpriority="high">
+  <div class="hero-in">
+    <div class="eyebrow"><span class="ln"></span>Research &amp; build holding company · Est. 2026</div>
+    <h1 class="title"><span class="zero">Zero</span><span class="one">-1</span><span class="labs">Labs</span></h1>
+    <p class="hero-lede">A holding company for the things I build and break — taken from <em>zero to one</em>, and kept in public so the climb is yours to verify.</p>
   </div>
-  <div class="scroll-cue hud"><span>scroll</span><span class="ln"></span></div>
+  <div class="cue"><span>scroll</span><span class="ln"></span></div>
 </header>
 
 <main>
-<section class="sec" id="thesis">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num hud">[ 01 ]</span><h2>The thesis</h2></div>
-    <p class="sec-sub">Zero-1 Labs is a personal holding company, not an agency. The work is built to be <b>verifiable</b> — code you can run, contracts you can inspect, papers you can read. One rule across every vertical: don't claim what you can't show.</p>
-    <div class="thesis">
-      <div class="th rv"><span class="vb hud">01 · build</span><h3>Ship the 0→1</h3><p>The hard part of any idea is the first working version. We prototype to a running artifact fast, then harden it — bridges, agents, edge-AI brains, on-chain games — and put it where people can pull it.</p></div>
-      <div class="th rv"><span class="vb hud">02 · break</span><h3>Adversarial by default</h3><p>Everything we build, we try to break. Stateful invariant fuzzing, exploit reproductions, a public CTF — security isn't a phase, it's how we know a thing actually holds.</p></div>
-      <div class="th rv"><span class="vb hud">03 · verify</span><h3>Proof over pitch</h3><p>No vapor. Each venture carries an honest note on where the guarantee ends, and anything still <span style="color:var(--warn)">exploring</span> is labelled as such until there's a shipped artifact behind it.</p></div>
+<section class="logline">
+  <div class="meta mono rv"><span class="ln"></span>The thesis</div>
+  <p class="rv d1">The value is made going <em>from zero to one.</em> <span class="mut">So we build the first working version, try our hardest to break it, and show the proof — never the pitch.</span></p>
+</section>
+
+<section id="portfolio">
+<!-- chapters injected here -->
+</section>
+
+<section class="ledger">
+  <img class="ledger-img" src="assets/ledger.webp" alt="A glowing financial ledger rendered in perspective." loading="lazy">
+  <div class="ledger-in">
+    <h2 class="rv">A holding company keeps a <em>ledger.</em> Here's ours — every line public, every number checkable.</h2>
+    <div class="figs">
+      <div class="fig rv d1"><div class="n serif">6</div><div class="k">active verticals</div></div>
+      <div class="fig rv d2"><div class="n serif">30<span class="u">+</span></div><div class="k">public repositories</div></div>
+      <div class="fig rv d3"><div class="n serif">14<span class="u">chains</span></div><div class="k">suwappu cross-chain reach</div></div>
+      <div class="fig rv d4"><div class="n serif">2018<span class="u">→</span></div><div class="k">building in public since</div></div>
     </div>
   </div>
 </section>
 
-<section class="sec" id="verticals">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num hud">[ 02 ]</span><h2>Six verticals</h2></div>
-    <p class="sec-sub">Each division below is backed by real, public work — a representative slice is listed per vertical with a direct link. The full catalogue lives on <a href="https://github.com/0xSoftBoi" target="_blank" rel="noopener" style="color:var(--amber2)">GitHub</a>.</p>
-    <div class="matrix" id="matrix"></div>
+<section class="about" id="about">
+  <div>
+    <div class="lbl rv"><span class="ln"></span>About</div>
+    <p class="rv d1">Zero-1 Labs is the holding entity for the independent research and engineering of <b>Tsolmondorj Natsagdorj</b> — a security &amp; systems engineer working across cross-chain infrastructure, applied ML, and the cryptography that ties them together.</p>
+    <p class="rv d2">It's the research-and-venture arm; <a class="ulink" href="https://montech.io" target="_blank" rel="noopener">Montech Studios</a> is the client practice. The bias is toward <em>shipping</em> — prototypes that become products, research that becomes a benchmark, audits that arrive with the exploit attached.</p>
   </div>
-</section>
-
-<section class="sec" id="flagship">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num hud">[ 03 ]</span><h2>Flagship ventures</h2></div>
-    <p class="sec-sub">Proof of execution — products that exist, in public, with artifacts you can pull right now.</p>
-    <div class="flags" id="flags"></div>
-  </div>
-</section>
-
-<section class="sec" id="numbers">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num hud">[ 04 ]</span><h2>By the numbers</h2></div>
-    <p class="sec-sub">A rough shape of the surface area — all of it public and checkable.</p>
-    <div class="strip rv">
-      <div class="stat"><div class="n mono">6</div><div class="k hud">active verticals</div></div>
-      <div class="stat"><div class="n mono">30<span class="u">+</span></div><div class="k hud">public repositories</div></div>
-      <div class="stat"><div class="n mono">14<span class="u">chains</span></div><div class="k hud">suwappu cross-chain reach</div></div>
-      <div class="stat"><div class="n mono">2018<span class="u">→</span></div><div class="k hud">building in public since</div></div>
+  <aside class="fcard rv d2">
+    <div class="role">Founder · principal engineer</div>
+    <div class="nm serif">Tsolmondorj Natsagdorj</div>
+    <div class="alias">0xSoftBoi</div>
+    <div class="frow">
+      <a class="fl" href="https://www.linkedin.com/company/zero-1-labs/" target="_blank" rel="noopener">Zero-1 Labs · LinkedIn<span class="arr">↗</span></a>
+      <a class="fl" href="https://www.linkedin.com/in/tsolmondorj" target="_blank" rel="noopener">Founder · LinkedIn<span class="arr">↗</span></a>
+      <a class="fl" href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">GitHub · @0xSoftBoi<span class="arr">↗</span></a>
+      <a class="fl" href="https://0xsoftboi.github.io" target="_blank" rel="noopener">Writing &amp; proof<span class="arr">↗</span></a>
     </div>
-  </div>
+  </aside>
 </section>
 
-<section class="sec" id="about">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num hud">[ 05 ]</span><h2>About</h2></div>
-    <div class="about">
-      <div class="rv">
-        <p>Zero-1 Labs is the holding entity for the independent research and engineering of <b>Tsolmondorj Natsagdorj</b> — a security &amp; systems engineer who works across cross-chain infrastructure, applied ML, and the cryptography that ties them together.</p>
-        <p>It sits alongside <a href="https://montech.io" target="_blank" rel="noopener" class="hl">Montech Studios</a>, the client-facing software practice, and gathers the in-house, research, and venture work under one roof. The bias is toward <b>shipping</b>: prototypes that become products, research that becomes a paper or a benchmark, audits that come with the exploit attached.</p>
-        <p>The label "Zero-1" is the whole point — the value is created going from <span class="hl">zero to one</span>, and everything here is kept public so the climb is checkable.</p>
-      </div>
-      <aside class="fcard rv">
-        <div class="role hud">Founder · principal engineer</div>
-        <div class="nm">Tsolmondorj Natsagdorj</div>
-        <div class="alias mono">0xSoftBoi</div>
-        <div class="frow">
-          <a href="https://www.linkedin.com/company/zero-1-labs/" target="_blank" rel="noopener">Zero-1 Labs · LinkedIn<span class="arr">↗</span></a>
-          <a href="https://www.linkedin.com/in/tsolmondorj" target="_blank" rel="noopener">Founder · LinkedIn<span class="arr">↗</span></a>
-          <a href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">GitHub · @0xSoftBoi<span class="arr">↗</span></a>
-          <a href="https://0xsoftboi.github.io" target="_blank" rel="noopener">Writing &amp; proof<span class="arr">↗</span></a>
-          <a href="https://montech.io" target="_blank" rel="noopener">Montech Studios<span class="arr">↗</span></a>
-        </div>
-      </aside>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="contact">
-  <div class="wrap">
-    <div class="cta rv">
-      <h3>Building at the 0→1 edge?</h3>
-      <p>Research collaborations, security work, or a venture that needs to go from idea to running artifact — let's talk.</p>
-      <div class="row">
-        <a class="btn pri hud" href="https://www.linkedin.com/company/zero-1-labs/" target="_blank" rel="noopener">Connect on LinkedIn →</a>
-        <a class="btn sec hud" href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">Browse the work ↗</a>
-      </div>
-    </div>
+<section class="contact" id="contact">
+  <div class="eb mono rv">Get in touch</div>
+  <h3 class="rv d1">Building at the <em>zero-to-one</em> edge?</h3>
+  <p class="rv d2">Research collaborations, security work, or a venture that needs to go from idea to running artifact — let's talk.</p>
+  <div class="cbtns rv d3">
+    <a class="btn pri" href="https://www.linkedin.com/company/zero-1-labs/" target="_blank" rel="noopener">Connect on LinkedIn →</a>
+    <a class="btn sec" href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">Browse the work ↗</a>
   </div>
 </section>
 </main>
 
-<footer class="foot wrap hud">
-  <span>© 2026 ZERO-1 LABS <span class="reg">// HOLDING CO.</span></span>
+<footer class="foot">
+  <span>© 2026 Zero-1 Labs — holding co.</span>
   <span><a href="https://github.com/0xSoftBoi" target="_blank" rel="noopener">github</a> · <a href="https://0xsoftboi.github.io" target="_blank" rel="noopener">writing</a> · <a href="https://montech.io" target="_blank" rel="noopener">montech</a> · <a href="https://www.linkedin.com/company/zero-1-labs/" target="_blank" rel="noopener">linkedin</a></span>
 </footer>
 
-<script>
-const GH="https://github.com/0xSoftBoi/";
-const AM="#ff9d4d",TL="#67d4c8",GD="#ffc081",GR="#6ee7a8",PR="#b69cff";
-// ── six verticals, each backed by real public work ──
-const VERTS=[
- {name:"Crypto & DeFi",idx:"V-01",accent:AM,motif:"bridge",
-  desc:"Cross-chain infrastructure built and stress-tested — bridges, AMMs, perps, and an agent-native DEX that swaps across 14 chains.",
-  rows:[
-   ["suwappu","Agent-native cross-chain DEX — REST · MCP · A2A","https://suwappu.bot","live"],
-   ["lock-mint-bridge-lab","supply≤collateral invariant, fuzzed 51,200×",GH+"lock-mint-bridge-lab",""],
-   ["cowswaprouter","Protocol-accurate TWAP splitter for CoW",GH+"cowswaprouter",""],
-   ["op-stack-reth","Full OP-Stack L2 rollup, one compose up",GH+"op-stack-reth",""]]},
- {name:"Security",idx:"V-02",accent:GR,motif:"scan",
-  desc:"Adversarial-first. Audits ship with the exploit attached, and a public benchmark measures where automated reasoning actually holds.",
-  rows:[
-   ["evmsec","Security CLI — is a bridge really fully backed?",GH+"evmsec",""],
-   ["BRIDGE-bench","Anthropic Fellowship — static analysis ≈0% F1",GH+"anthropic-fellowship",""],
-   ["printing-money-labs","12 DeFi exploits, dissected and patched",GH+"printing-money-labs",""],
-   ["smart-contract-audit-framework","13-detector static analyzer, CI-ready",GH+"smart-contract-audit-framework",""]]},
- {name:"AI",idx:"V-03",accent:PR,motif:"nodes",
-  desc:"Applied, local-first AI — coding assistants that run offline, constrained-hardware agent stacks, and reproducible interpretability work.",
-  rows:[
-   ["localai","Local MLX coding + vision TUI, offline",GH+"localai",""],
-   ["hermes-agents","Local-first agent stack for 8GB hardware",GH+"hermes-agents",""],
-   ["mech-interp","Where GPT-2 reads 'not' but ignores it",GH+"anthropic-fellowship",""],
-   ["intelligent-scheduler","Energy-pattern-aware calendar optimizer",GH+"intelligent-scheduler",""]]},
- {name:"Robotics",idx:"V-04",accent:TL,motif:"flow",
-  desc:"Edge AI in the physical world — an active-inference robot brain on Metal + CUDA, and a fleet of rovers you hire over HTTP.",
-  rows:[
-   ["onchain-rover","Physical AI agent fleet, hired over HTTP",GH+"onchain-rover",""],
-   ["sensorforge","Active-inference robot brain · iPhone → Jetson",GH+"sensorforge",""],
-   ["jetson-voice-assistant","Fully offline on-device voice, Jetson Orin",GH+"jetson-voice-assistant",""]]},
- {name:"Materials",idx:"V-05",accent:GD,motif:"lattice",
-  desc:"Machine learning pointed at materials discovery — GNoME-style active learning across a 256K-structure benchmark.",
-  rows:[
-   ["gnome-materials","Active learning, 95% top-100 recall @ 20% budget",GH+"gnome-materials",""],
-   ["active-materials-discovery","Discovery pipeline on a pretrained potential",GH+"active-materials-discovery","explore"],
-   ["matgl-al-benchmark","MatGL active-learning benchmark harness",GH+"matgl-al-benchmark","explore"]]},
- {name:"Gaming",idx:"V-06",accent:AM,motif:"board",
-  desc:"On-chain and cryptographic games — ZK/FHE fog-of-war chess, a full on-chain engine, and a chaotic market-manipulation party game.",
-  rows:[
-   ["fhe-dark-chess","Fog-of-war check over an encrypted board · live",GH+"fhe-dark-chess","live"],
-   ["zk-dark-chess","ZK move-legality on a Poseidon-committed board",GH+"zk-dark-chess",""],
-   ["GoblinGame","4–8 player goblin stock-market party game",GH+"GoblinGame",""],
-   ["satoshi_flip","Sui coin-flip: BLS vs native DKG randomness",GH+"satoshi_flip",""]]},
-];
-
-function rgba(c,a){const n=parseInt(c.slice(1),16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;}
-function seedRnd(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^h>>>16)>>>0)/4294967296;};}
-function drawMotif(cv,type,ac,seed){
- const dpr=Math.min(devicePixelRatio,2),w=cv.clientWidth||560,h=cv.clientHeight||240;
- cv.width=w*dpr;cv.height=h*dpr;const x=cv.getContext('2d');x.scale(dpr,dpr);const R=seedRnd(seed);
- x.strokeStyle=rgba(ac,.06);x.lineWidth=1;for(let i=0;i<w;i+=28){x.beginPath();x.moveTo(i,0);x.lineTo(i,h);x.stroke();}for(let j=0;j<h;j+=28){x.beginPath();x.moveTo(0,j);x.lineTo(w,j);x.stroke();}
- x.lineWidth=1.5;x.strokeStyle=rgba(ac,.9);x.fillStyle=rgba(ac,.9);x.shadowColor=ac;x.shadowBlur=9;
- if(type==='board'){const N=8,sz=Math.min(w,h)*0.8,cs=sz/N,ox=(w-sz)/2,oy=(h-sz)/2;
-   x.shadowBlur=0;x.strokeStyle=rgba(ac,.4);x.strokeRect(ox,oy,sz,sz);
-   for(let i=1;i<N;i++){x.beginPath();x.moveTo(ox+i*cs,oy);x.lineTo(ox+i*cs,oy+sz);x.moveTo(ox,oy+i*cs);x.lineTo(ox+sz,oy+i*cs);x.stroke();}
-   x.shadowBlur=9;for(let i=0;i<N;i++)for(let j=0;j<N;j++)if(R()<0.2){x.fillStyle=rgba(ac,.14+R()*.5);x.fillRect(ox+i*cs+2,oy+j*cs+2,cs-4,cs-4);}
- }else if(type==='bridge'){const lx=w*0.16,rx=w*0.84,ty=h*0.32,by=h*0.78;
-   x.strokeStyle=rgba(ac,.4);x.beginPath();x.moveTo(lx,ty-8);x.lineTo(lx,by);x.moveTo(rx,ty-8);x.lineTo(rx,by);x.moveTo(lx,by);x.lineTo(rx,by);x.stroke();
-   x.strokeStyle=rgba(ac,.9);for(let k=0;k<3;k++){x.beginPath();x.moveTo(lx,ty+k*7);x.quadraticCurveTo(w/2,ty+22+k*12,rx,ty+k*7);x.stroke();}
-   for(let k=0;k<4;k++){const t=.2+k*.2;x.fillStyle=rgba(ac,1);x.beginPath();x.arc(lx+(rx-lx)*t,ty+22*4*(t-t*t),3.2,0,7);x.fill();}
- }else if(type==='scan'){const p=24,lh=15;x.shadowBlur=4;for(let y=p,i=0;y<h-p;y+=lh,i++){x.fillStyle=rgba(ac,i%4===0?.85:.28);x.fillRect(p,y,(0.18+R()*0.72)*(w-2*p),4);}x.shadowBlur=0;x.fillStyle=rgba(ac,1);x.fillRect(p,h-p-4,9,8);
- }else if(type==='flow'){x.lineWidth=1.4;for(let i=0;i<80;i++){const px=R()*w,py=R()*h,a=Math.sin(px*0.018)+Math.cos(py*0.02)*1.4,l=5+R()*15;x.strokeStyle=rgba(ac,.25+R()*.6);x.beginPath();x.moveTo(px,py);x.lineTo(px+Math.cos(a)*l,py+Math.sin(a)*l);x.stroke();}
- }else if(type==='lattice'){const gx=Math.min(w,h)*0.18,ox=w/2-gx*2,oy=h/2-gx*1.2,P=[];for(let i=0;i<4;i++)for(let j=0;j<3;j++){const px=ox+i*gx+(j%2)*gx/2,py=oy+j*gx;P.push([px,py]);}
-   x.strokeStyle=rgba(ac,.4);for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const d=Math.hypot(P[i][0]-P[j][0],P[i][1]-P[j][1]);if(d<gx*1.2){x.beginPath();x.moveTo(P[i][0],P[i][1]);x.lineTo(P[j][0],P[j][1]);x.stroke();}}
-   x.fillStyle=rgba(ac,1);P.forEach(p=>{x.beginPath();x.arc(p[0],p[1],3.4,0,7);x.fill();});
- }else{const n=7,P=[];for(let i=0;i<n;i++)P.push([26+R()*(w-52),26+R()*(h-52)]);x.strokeStyle=rgba(ac,.38);for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)if(R()<0.42){x.beginPath();x.moveTo(P[i][0],P[i][1]);x.lineTo(P[j][0],P[j][1]);x.stroke();}x.fillStyle=rgba(ac,1);P.forEach(p=>{x.beginPath();x.arc(p[0],p[1],3+R()*2,0,7);x.fill();});}
-}
-
-const mEl=document.getElementById('matrix');
-VERTS.forEach(v=>{const d=document.createElement('div');d.className='vert rv';d.style.setProperty('--accent',v.accent);
- const rows=v.rows.map(r=>`<a class="vrow" href="${r[2]}" target="_blank" rel="noopener"><span class="vr-name">${r[0]}</span><span class="vr-desc">${r[1]}</span>${r[3]?`<span class="vr-tag ${r[3]}">${r[3]==='live'?'live':'exploring'}</span>`:''}<span class="arr">↗</span></a>`).join('');
- d.innerHTML=`<div class="vtop"><span class="vname hud">${v.name}</span><span class="vidx mono">${v.idx}</span></div><div class="vdesc">${v.desc}</div><div class="vlist">${rows}</div>`;
- mEl.appendChild(d);});
-
-const FLAGS=[
- {name:"Suwappu",accent:TL,motif:"bridge",chips:[["live on suwappu.bot","live"],["DEX"],["TEE custody"]],
-  title:"An agent-native cross-chain DEX",
-  body:"Swap across <b>14 chains</b> over MCP, A2A, or REST — a 10+ provider priority router (CoW, Jito, CCTP), non-custodial Turnkey TEE wallets, and three published npm SDKs discoverable by other agents.",
-  links:[["suwappu.bot","https://suwappu.bot"],["agent card","https://api.suwappu.bot/.well-known/agent.json"]]},
- {name:"Onchain Rover",accent:AM,motif:"nodes",chips:[["ETHGlobal NYC 2026"],["agent"],["x402 · ENS"]],
-  title:"Give your AI agent a body",
-  body:"A fleet of <b>physical rovers you hire over HTTP</b> — paid in USDC on Arc, identified by ENS + ERC-8004, gated by World ID, and governed by a human Ledger clear-signature. A native-Solana fork ships alongside.",
-  links:[["repo",GH+"onchain-rover"],["solana fork",GH+"onchain-rover-solana"]]},
-];
-const fEl=document.getElementById('flags');
-FLAGS.forEach(f=>{const d=document.createElement('div');d.className='flag rv';d.style.setProperty('--accent',f.accent);
- d.innerHTML=`<div class="cover"><canvas aria-hidden="true"></canvas><div class="cv-name" style="color:${f.accent}">${f.name}</div></div>
-  <div class="in"><div class="chips">${f.chips.map(c=>`<span class="chip hud${c[1]?' '+c[1]:''}">${c[0]}</span>`).join('')}</div>
-   <h3>${f.title}</h3><p>${f.body}</p>
-   <div class="links">${f.links.map(l=>`<a class="plink hud" href="${l[1]}" target="_blank" rel="noopener">${l[0]}<span class="arr">↗</span></a>`).join('')}</div></div>`;
- fEl.appendChild(d);drawMotif(d.querySelector('canvas'),f.motif,f.accent,f.name);});
-
-// ── nav + motion + reveal ──
-const nav=document.getElementById('nav');
-addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
-const mt=document.getElementById('mtog'),mtl=document.getElementById('mtog-l');
-window.__motionOff=false;
-function setMotion(off){window.__motionOff=off;document.body.classList.toggle('no-motion',off);mt.setAttribute('aria-pressed',off);mtl.textContent=off?'motion off':'motion';window.dispatchEvent(new Event('motionchange'));}
-const MK='z1_motion_off';let sv=null;try{sv=localStorage.getItem(MK);}catch(e){}
-if(sv!==null)setMotion(sv==='1');else if(matchMedia('(prefers-reduced-motion:reduce)').matches)setMotion(true);
-mt.addEventListener('click',()=>{setMotion(!window.__motionOff);try{localStorage.setItem(MK,window.__motionOff?'1':'0');}catch(e){}});
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -5% 0px'});
-document.querySelectorAll('.rv').forEach(e=>{io.observe(e);if(e.getBoundingClientRect().top<innerHeight)e.classList.add('in');});
-setTimeout(()=>document.querySelectorAll('.rv:not(.in)').forEach(e=>e.classList.add('in')),1500);
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"Zero-1 Labs","description":"A research-and-build holding company taking ideas from zero to one across crypto, security, AI, robotics, materials and gaming.","foundingDate":"2026","founder":{"@type":"Person","name":"Tsolmondorj Natsagdorj","alternateName":"0xSoftBoi"},"sameAs":["https://www.linkedin.com/company/zero-1-labs/","https://github.com/0xSoftBoi","https://0xsoftboi.github.io","https://montech.io"]}
 </script>
 
-<!-- ── HERO: a particle field condensing from 0 → 1 ── -->
 <script>
-(function(){
-const cv=document.getElementById('field');const x=cv.getContext&&cv.getContext('2d');
-if(!x){cv.style.display='none';return;}
-let W,H;function resize(){const D=Math.min(devicePixelRatio,2);W=innerWidth;H=innerHeight;cv.width=W*D;cv.height=H*D;x.setTransform(D,0,0,D,0,0);}
-resize();addEventListener('resize',resize,{passive:true});
-const AM='255,157,77',TL='103,212,200',A=(c,a)=>'rgba('+c+','+a+')';
-const RND=(a,b)=>a+Math.random()*(b-a),cl01=v=>Math.max(0,Math.min(1,v));
-let mx=-999,my=-999;
-addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;},{passive:true});
-addEventListener('pointerleave',()=>{mx=my=-999;});
-// nodes drift; a slow pulse sweeps left→right, "resolving" scattered nodes toward an aligned column (0 → 1)
-let nodes=[];function mk(){return{x:RND(0,W),y:RND(0,H),vx:RND(-10,10),vy:RND(-10,10),r:RND(1.1,2.6),hot:Math.random()<0.16};}
-function seed(){nodes=[];const n=Math.min(150,Math.floor(W*H/12000));for(let i=0;i<n;i++)nodes.push(mk());}
-seed();addEventListener('resize',()=>{if(Math.abs(nodes.length-W*H/12000)>40)seed();});
-let sweep=0;
-function update(dt){sweep=(sweep+dt*0.10)%1.6;
- for(const p of nodes){p.x+=p.vx*dt;p.y+=p.vy*dt;
-  if(mx>0){const dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy;if(d2<16000){const f=(1-Math.sqrt(d2)/126)*dt*52;p.x+=dx*0.03*f;p.y+=dy*0.03*f;}}
-  if(p.x<-10)p.x=W+10;if(p.x>W+10)p.x=-10;if(p.y<-10)p.y=H+10;if(p.y>H+10)p.y=-10;}}
-function paint(){x.clearRect(0,0,W,H);x.globalCompositeOperation='lighter';
- const sx=sweep*W;
- // links
- x.lineWidth=1;for(let i=0;i<nodes.length;i++){const a=nodes[i];for(let j=i+1;j<nodes.length;j++){const b=nodes[j];const dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;if(d2<15000){const al=(1-Math.sqrt(d2)/122)*0.16;const near=Math.abs((a.x+b.x)/2-sx)<70;x.strokeStyle=A(near?TL:AM,near?al*1.6:al);x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke();}}}
- // nodes
- for(const p of nodes){const near=Math.abs(p.x-sx)<60;const c=near?TL:(p.hot?AM:AM);const a=near?0.95:(p.hot?0.6:0.3);
-  x.beginPath();x.arc(p.x,p.y,p.r+(near?1.4:0),0,7);x.fillStyle=A(c,a);x.fill();
-  if(near){x.beginPath();x.arc(p.x,p.y,p.r+5,0,7);x.fillStyle=A(TL,0.10);x.fill();}}
- // sweep line
- x.strokeStyle=A(TL,0.22);x.lineWidth=1.4;x.beginPath();x.moveTo(sx,0);x.lineTo(sx,H);x.stroke();
- if(mx>0){x.strokeStyle=A(TL,0.34);x.lineWidth=1.2;x.beginPath();x.arc(mx,my,44,0,7);x.stroke();}
- x.globalCompositeOperation='source-over';}
-let last=0,running=false,raf=0,vis=true;
-function loop(ts){if(!running){raf=0;return;}const dt=Math.min(0.05,((ts-last)||16)/1000);last=ts;update(dt);paint();raf=requestAnimationFrame(loop);}
-function go(){if(window.__motionOff)return still();running=true;last=0;if(!raf)raf=requestAnimationFrame(loop);}
-function stop(){running=false;if(raf)cancelAnimationFrame(raf);raf=0;}
-function still(){stop();update(0.4);paint();}
-new IntersectionObserver(es=>{vis=es[0].isIntersecting;vis?go():stop();},{threshold:.02}).observe(document.getElementById('top'));
-document.addEventListener('visibilitychange',()=>{document.hidden?stop():(vis&&go());});
-addEventListener('motionchange',()=>{window.__motionOff?still():(vis&&go());});
-if(window.__motionOff)still();else go();
-})();
+const GH="https://github.com/0xSoftBoi/";
+const CH=[
+ {key:"crypto",no:"01",title:"Crypto &amp; DeFi",img:"assets/crypto.webp",
+  alt:"A fog-lit suspension bridge glowing amber and teal in the dark.",
+  line:"Cross-chain infrastructure, built and stress-tested.",
+  body:"Bridges, AMMs and perps — and <b>Suwappu</b>, an agent-native DEX that swaps across fourteen chains over REST, MCP and A2A.",
+  v:[["Suwappu","Agent-native cross-chain DEX · 14 chains","https://suwappu.bot","live"],
+     ["lock-mint-bridge-lab","supply≤collateral invariant, fuzzed 51,200×",GH+"lock-mint-bridge-lab",""],
+     ["cowswaprouter","Protocol-accurate TWAP splitter for CoW",GH+"cowswaprouter",""]]},
+ {key:"security",no:"02",title:"Security",img:"assets/security.webp",
+  alt:"A red warning beacon glowing over streaming lines of code.",
+  line:"Adversarial by default — the audit ships with the exploit.",
+  body:"A security CLI that asks whether a bridge is <b>really</b> fully backed, and an Anthropic-Fellowship benchmark measuring where automated reasoning actually holds.",
+  v:[["evmsec","Security CLI — is a bridge actually fully backed?",GH+"evmsec",""],
+     ["BRIDGE-bench","Anthropic Fellowship — static analysis ≈ 0% F1",GH+"anthropic-fellowship",""],
+     ["printing-money-labs","12 DeFi exploits, dissected and patched",GH+"printing-money-labs",""]]},
+ {key:"ai",no:"03",title:"AI",img:"assets/ai.webp",
+  alt:"A luminous neural structure with teal filaments and an amber core.",
+  line:"Applied, local-first intelligence.",
+  body:"Coding assistants that run offline, agent stacks for constrained hardware, and reproducible interpretability work that pins down <b>where a model reasons.</b>",
+  v:[["localai","Local MLX coding + vision TUI, fully offline",GH+"localai",""],
+     ["hermes-agents","Local-first agent stack for 8GB hardware",GH+"hermes-agents",""],
+     ["mech-interp","Where GPT-2 reads ‘not’ but ignores it",GH+"anthropic-fellowship",""]]},
+ {key:"robotics",no:"04",title:"Robotics",img:"assets/robotics.webp",
+  alt:"Two glowing mechanical discs wired into a dark machine core.",
+  line:"Edge intelligence, given a body.",
+  body:"An active-inference robot brain running real free-energy GPU kernels from iPhone to Jetson — and a fleet of physical rovers you <b>hire over HTTP.</b>",
+  v:[["onchain-rover","Physical AI agent fleet, hired over HTTP","https://github.com/0xSoftBoi/onchain-rover",""],
+     ["sensorforge","Active-inference robot brain · iPhone → Jetson",GH+"sensorforge",""],
+     ["jetson-voice-assistant","Fully offline on-device voice, Jetson Orin",GH+"jetson-voice-assistant",""]]},
+ {key:"materials",no:"05",title:"Materials",img:"assets/materials.webp",
+  alt:"An endless lattice of glowing crystal nodes receding to the horizon.",
+  line:"Machine learning pointed at discovery.",
+  body:"GNoME-style active learning across a <b>256,963-structure</b> benchmark — finding stable materials far faster than random screening, with the honest failure modes reported too.",
+  v:[["gnome-materials","Active learning · 95% top-100 recall @ 20% budget",GH+"gnome-materials",""],
+     ["active-materials-discovery","Discovery pipeline on a pretrained potential",GH+"active-materials-discovery","explore"],
+     ["matgl-al-benchmark","MatGL active-learning benchmark harness",GH+"matgl-al-benchmark","explore"]]},
+ {key:"gaming",no:"06",title:"Gaming",img:"assets/gaming.webp",
+  alt:"A glowing chessboard beneath an arcane neon seal.",
+  line:"Games as cryptography demonstrations.",
+  body:"Fog-of-war chess where ‘is the king in check?’ is decided over an <b>encrypted board</b> — plus a ZK twin, an on-chain engine, and a chaotic market-manipulation party game.",
+  v:[["fhe-dark-chess","Check over an encrypted board · live on Sepolia",GH+"fhe-dark-chess","live"],
+     ["zk-dark-chess","ZK move-legality on a Poseidon commitment",GH+"zk-dark-chess",""],
+     ["GoblinGame","4–8 player goblin stock-market party game",GH+"GoblinGame",""]]},
+];
+const host=document.getElementById('portfolio');
+CH.forEach(c=>{
+ const v=c.v.map(r=>`<a class="v" href="${r[2]}" target="_blank" rel="noopener"><span class="v-name">${r[0]}</span><span class="v-desc">${r[1]}</span>${r[3]?`<span class="v-tag ${r[3]}">${r[3]==='live'?'live':'exploring'}</span>`:''}<span class="arr">↗</span></a>`).join('');
+ const s=document.createElement('section');s.className='panel';s.id=c.key;
+ s.innerHTML=`<img class="panel-img" src="${c.img}" alt="${c.alt}" loading="lazy" decoding="async">
+  <div class="panel-in">
+   <div class="ch-no mono rv"><span class="ln"></span>Ch. ${c.no} — ${c.title.replace(/&amp;/g,'&')}</div>
+   <h2 class="ch-title rv d1">${c.title}</h2>
+   <p class="ch-line rv d1">${c.line}</p>
+   <p class="ch-body rv d2">${c.body}</p>
+   <div class="ventures rv d3">${v}</div>
+  </div>`;
+ host.appendChild(s);
+});
+
+// ── reveal ──
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.16,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+
+// ── nav hide-on-scroll-down ──
+const nav=document.getElementById('nav');let lastY=0;
+addEventListener('scroll',()=>{const y=scrollY;nav.classList.toggle('hide',y>lastY&&y>240);lastY=y;},{passive:true});
+
+// ── motion toggle ──
+const mt=document.getElementById('mtog'),mtl=document.getElementById('mtog-l');
+window.__off=false;
+function setMotion(o){window.__off=o;document.body.classList.toggle('no-motion',o);mt.setAttribute('aria-pressed',o);mtl.textContent=o?'motion off':'motion';}
+const MK='z1cine_motion';let sv=null;try{sv=localStorage.getItem(MK);}catch(e){}
+if(sv!==null)setMotion(sv==='1');else if(matchMedia('(prefers-reduced-motion:reduce)').matches)setMotion(true);
+mt.addEventListener('click',()=>{setMotion(!window.__off);try{localStorage.setItem(MK,window.__off?'1':'0');}catch(e){}});
+
+// ── cinematic parallax (transform-only, rAF-batched) ──
+const layers=[...document.querySelectorAll('.panel-img, .ledger-img')];
+let ticking=false;
+function parallax(){ticking=false;if(window.__off)return;const vh=innerHeight;
+ for(const el of layers){const p=el.closest('section').getBoundingClientRect();
+   if(p.bottom<-50||p.top>vh+50)continue;
+   const prog=(p.top+p.height/2-vh/2)/(vh);            // -1 … 1 through center
+   const shift=Math.max(-1,Math.min(1,prog))*-7;        // %
+   el.style.transform=`translate3d(0,${shift}%,0)`;
+ }}
+addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(parallax);}},{passive:true});
+addEventListener('resize',parallax,{passive:true});
+parallax();
 </script>
 </body>
 </html>
