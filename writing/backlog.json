@@ -1,10 +1,12 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "updated": "2026-08-08",
   "policy": {
     "no_paid_experiments": true,
     "blocked_items_do_not_block_queue": true,
-    "default_standard": "writing/RESEARCH_TEMPLATE.md"
+    "default_standard": "writing/RESEARCH_TEMPLATE.md",
+    "editorial_reference": "https://www.lauris.xyz/",
+    "reference_rule": "Use thesis-first structure and intellectual coherence as a quality bar; do not clone visual identity or copy prose."
   },
   "items": [
     {
@@ -17,6 +19,7 @@
       "audience_fit": ["SpaceX", "systems", "infrastructure"],
       "evidence_repos": ["0xSoftBoi/roce-preflight"],
       "hard_result": "197 passing unit tests preceded four defects exposed by real RDMA execution",
+      "published_path": "writing/197-tests-four-hardware-bugs.html",
       "next_node": "revision_on_new_evidence"
     },
     {
@@ -28,6 +31,7 @@
       "zero_cost_path": true,
       "audience_fit": ["Anthropic", "SpaceX", "research engineering"],
       "evidence_repos": ["0xSoftBoi/roce-preflight", "0xSoftBoi/anthropic-fellowship", "0xSoftBoi/active-materials-discovery", "0xSoftBoi/aiur"],
+      "published_path": "writing/hidden-failure-modes.html",
       "next_node": "revision_on_new_evidence"
     },
     {
@@ -38,123 +42,130 @@
       "priority": 94,
       "zero_cost_path": true,
       "audience_fit": ["Anthropic", "OpenAI", "scientific ML"],
-      "evidence_repos": ["0xSoftBoi/active-materials-discovery", "0xSoftBoi/matgl-al-benchmark", "materialyzeai/matgl"],
+      "evidence_repos": ["0xSoftBoi/active-materials-discovery", "materialyzeai/matgl"],
       "hard_result": "Greedy DAF 5.15 vs UCB 5.17 at lambda=0.5; uncertainty-error Spearman correlation -0.47; high uncertainty weight collapses DAF to 0.91",
       "known_rival": "The failure may be specific to output-layer MC dropout, this OOD proxy task, or this pretrained surrogate rather than uncertainty-aware acquisition generally",
       "published_path": "writing/when-uncertainty-makes-active-learning-worse.html",
-      "next_node": "revision_on_new_evidence",
-      "history": [{"date":"2026-08-08","node":"publish","note":"Published after narrowing the claim to static acquisition screening, adding calibration diagnostics, a high-lambda robustness test, primary literature context, and explicit rival explanations."}]
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "benchmark-leaked-the-answers",
-      "title": "I built a security benchmark and discovered it was leaking the answers",
-      "status": "next",
+      "title": "A benchmark can measure its own metadata",
+      "status": "published",
       "kind": "AI evaluation postmortem",
       "priority": 92,
       "zero_cost_path": true,
       "audience_fit": ["Anthropic", "OpenAI", "evaluations", "AI security"],
       "evidence_repos": ["0xSoftBoi/anthropic-fellowship"],
-      "hard_result": "13 of 24 prompts contained severe/moderate contamination in the original audit; the zero-cost sanitizer/preflight now locks the 16+5+3 population and clean anon condition",
-      "claim_boundary": "Do not claim the sanitized model score or causal size of the contamination effect because the paid raw/stripped/anon inference rerun is intentionally not being run",
-      "next_node": "claim_lock"
+      "hard_result": "13 of 24 original prompts contained severe author-injected leakage; Euler included the exact ground-truth label while the vulnerable function was absent from committed source",
+      "claim_boundary": "No sanitized model score or causal effect-size claim because paid raw/stripped/anon inference is intentionally not run",
+      "published_path": "writing/a-benchmark-can-measure-its-own-metadata.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "upstreaming-uncertainty-into-matgl",
-      "title": "Upstreaming uncertainty: from an experiment to a reusable MatGL primitive",
-      "status": "queued",
+      "title": "A research primitive should outlive the result that motivated it",
+      "status": "published",
       "kind": "open-source engineering case study",
       "priority": 88,
       "zero_cost_path": true,
       "audience_fit": ["Anthropic", "OpenAI", "scientific computing", "ML infrastructure"],
-      "evidence_repos": ["0xSoftBoi/active-materials-discovery", "0xSoftBoi/matgl", "materialyzeai/matgl"],
-      "hard_result": "MCDropoutWrapper was accepted upstream; the backbone-once path reports about 16.5x speedup at 20 passes on RTX 3080 while retaining numerical equivalence",
-      "next_node": "harvest"
+      "evidence_repos": ["0xSoftBoi/active-materials-discovery", "materialyzeai/matgl"],
+      "hard_result": "MCDropoutWrapper merged upstream in MatGL #801; application repo reports about 16.5x backbone-once speedup at 20 passes on RTX 3080",
+      "published_path": "writing/a-research-primitive-should-outlive-its-result.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "autograd-is-part-of-the-api",
       "title": "Autograd is part of the API",
-      "status": "queued",
+      "status": "published",
       "kind": "numerical correctness postmortem",
       "priority": 86,
       "zero_cost_path": true,
       "audience_fit": ["Anthropic", "OpenAI", "ML systems"],
-      "evidence_repos": ["0xSoftBoi/matgl", "materialyzeai/matgl"],
-      "hard_result": "A tensor-native SoftExponential fix removed branching-related autograd failure and guarded NaN/Inf gradients; patch merged upstream",
-      "next_node": "harvest"
+      "evidence_repos": ["materialyzeai/matgl"],
+      "hard_result": "MatGL #809 made SoftExponential tensor-native, guarded NaN/Inf gradients, preserved valid-region forward values to 0–5e-7, and passed 92 layer tests",
+      "published_path": "writing/autograd-is-part-of-the-api.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "one-default-can-mask-a-distribution",
-      "title": "The sampler default that could mask a token distribution",
-      "status": "queued",
+      "title": "A default is executable policy",
+      "status": "published",
       "kind": "ML inference correctness",
       "priority": 84,
       "zero_cost_path": true,
       "audience_fit": ["Anthropic", "OpenAI", "inference"],
-      "evidence_repos": ["0xSoftBoi/mlx-lm", "ml-explore/mlx-lm"],
-      "hard_result": "Merged MLX-LM XTC default fix prevented a pathological configuration from masking nearly the entire candidate token distribution",
-      "next_node": "harvest"
+      "evidence_repos": ["ml-explore/mlx-lm"],
+      "hard_result": "Merged MLX-LM #1372 changed XTC threshold default from 0.0 to 0.1 across sampler, CLI, and server to avoid a degenerate partial configuration",
+      "published_path": "writing/a-default-is-executable-policy.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "recursive-types-without-mutual-recursion",
-      "title": "Recursive types without mutual recursion",
-      "status": "queued",
+      "title": "Recursion is not one kind of cycle",
+      "status": "published",
       "kind": "Rust semantics case study",
       "priority": 80,
       "zero_cost_path": true,
       "audience_fit": ["SpaceX", "systems", "Rust"],
-      "evidence_repos": ["0xSoftBoi/alloy", "alloy-rs/core"],
-      "hard_result": "Merged Alloy EIP-712 fix distinguished legal self-reference from illegal mutual recursion and added targeted regression coverage",
-      "next_node": "harvest"
+      "evidence_repos": ["alloy-rs/core"],
+      "hard_result": "Merged Alloy #1105 distinguished legal EIP-712 self-reference from strict runtime resolution and mutual recursion; full alloy-dyn-abi suite passed 194 tests",
+      "published_path": "writing/recursion-is-not-one-kind-of-cycle.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "date-time-bugs-are-systems-bugs",
       "title": "Date and time bugs are systems bugs",
-      "status": "queued",
-      "kind": "Rust compatibility postmortem",
+      "status": "published",
+      "kind": "Rust compatibility synthesis",
       "priority": 78,
       "zero_cost_path": true,
       "audience_fit": ["SpaceX", "systems", "Rust"],
-      "evidence_repos": ["0xSoftBoi/coreutils", "0xSoftBoi/parse_datetime", "uutils/coreutils", "uutils/parse_datetime"],
-      "hard_result": "Multiple merged GNU-compatibility fixes cover timezone re-zoning, negative fractional Unix timestamps, AM/PM parsing, and UT timezone handling",
-      "next_node": "harvest"
+      "evidence_repos": ["uutils/coreutils", "uutils/parse_datetime"],
+      "hard_result": "Four merged GNU-compatibility fixes cover timezone re-zoning, negative fractional Unix timestamp floor semantics, AM/PM combined parsing, and UT timezone handling",
+      "published_path": "writing/date-and-time-bugs-are-systems-bugs.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "from-simulated-proof-to-live-invariant",
-      "title": "From simulated proof to live invariant",
-      "status": "queued",
+      "title": "An invariant is not an end-to-end proof",
+      "status": "published",
       "kind": "security-critical distributed systems",
       "priority": 74,
       "zero_cost_path": true,
       "audience_fit": ["SpaceX", "systems", "security"],
-      "evidence_repos": ["0xSoftBoi/lock-mint-bridge-lab", "0xSoftBoi/cross-evm-bridge", "0xSoftBoi/suwappubot"],
-      "hard_result": "Use concrete bridge invariants, proof-validation boundaries, and live verification artifacts rather than product claims",
-      "next_node": "harvest"
+      "evidence_repos": ["0xSoftBoi/lock-mint-bridge-lab"],
+      "hard_result": "Supply≤collateral and adversary-mints-nothing invariants run under 512 runs × depth 100; a gate-off mutation breaks the supply invariant in one call",
+      "published_path": "writing/an-invariant-is-not-an-end-to-end-proof.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "airborne-carrier-delete-scifi-first",
-      "title": "Building an airborne drone carrier by deleting the science-fiction parts first",
-      "status": "parked",
-      "kind": "autonomy engineering report",
+      "title": "Delete the science-fiction parts first",
+      "status": "published",
+      "kind": "autonomy design note",
       "priority": 90,
       "zero_cost_path": false,
       "audience_fit": ["SpaceX", "autonomy", "robotics"],
       "evidence_repos": ["0xSoftBoi/aiur"],
-      "blocker": "Needs physical P0 capture/recovery telemetry before performance claims can be promoted from target to observed result",
-      "allowed_fallback": "May publish a clearly labeled design note without achieved-performance claims",
-      "unblock_condition": "Commit instrumented recovery dataset and acceptance-gate results",
-      "next_node": "park"
+      "claim_boundary": "Published as a design note only; physical recovery performance remains target, not observed evidence",
+      "unblock_condition_for_research_upgrade": "Commit instrumented recovery dataset and acceptance-gate results",
+      "published_path": "writing/delete-the-science-fiction-parts-first.html",
+      "next_node": "revision_on_new_evidence"
     },
     {
       "slug": "what-upstream-maintainers-taught-me-about-correctness",
-      "title": "What upstream maintainers taught me about correctness",
-      "status": "queued",
+      "title": "Upstream is a different kind of test",
+      "status": "published",
       "kind": "open-source synthesis",
       "priority": 68,
       "zero_cost_path": true,
       "audience_fit": ["Anthropic", "OpenAI", "SpaceX", "open source"],
       "evidence_repos": ["materialyzeai/matgl", "ml-explore/mlx-lm", "alloy-rs/core", "uutils/coreutils", "uutils/parse_datetime"],
-      "hard_result": "Synthesize only accepted upstream patches and clearly separate merged evidence from closed or still-open attempts",
-      "next_node": "harvest"
+      "hard_result": "Synthesis is limited to eight merged third-party patches and explicitly treats merge as external evidence, not proof of correctness",
+      "published_path": "writing/upstream-is-a-different-kind-of-test.html",
+      "next_node": "revision_on_new_evidence"
     }
   ]
 }
