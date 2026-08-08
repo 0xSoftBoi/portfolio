@@ -1,0 +1,32 @@
+name: writing-loop
+
+on:
+  pull_request:
+    paths:
+      - "writing/**"
+      - "scripts/writing_loop.py"
+      - ".github/workflows/writing-loop.yml"
+  push:
+    branches: [main]
+    paths:
+      - "writing/**"
+      - "scripts/writing_loop.py"
+      - ".github/workflows/writing-loop.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate research writing loop
+        run: python scripts/writing_loop.py validate
+      - name: Show current queue
+        run: python scripts/writing_loop.py status
+      - name: Show selected next article
+        run: python scripts/writing_loop.py pick
