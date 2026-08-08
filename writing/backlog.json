@@ -33,7 +33,7 @@
     {
       "slug": "when-uncertainty-makes-active-learning-worse",
       "title": "When uncertainty makes active learning worse",
-      "status": "next",
+      "status": "published",
       "kind": "scientific ML negative result",
       "priority": 94,
       "zero_cost_path": true,
@@ -41,12 +41,14 @@
       "evidence_repos": ["0xSoftBoi/active-materials-discovery", "0xSoftBoi/matgl-al-benchmark", "materialyzeai/matgl"],
       "hard_result": "Greedy DAF 5.15 vs UCB 5.17 at lambda=0.5; uncertainty-error Spearman correlation -0.47; high uncertainty weight collapses DAF to 0.91",
       "known_rival": "The failure may be specific to output-layer MC dropout, this OOD proxy task, or this pretrained surrogate rather than uncertainty-aware acquisition generally",
-      "next_node": "harvest"
+      "published_path": "writing/when-uncertainty-makes-active-learning-worse.html",
+      "next_node": "revision_on_new_evidence",
+      "history": [{"date":"2026-08-08","node":"publish","note":"Published after narrowing the claim to static acquisition screening, adding calibration diagnostics, a high-lambda robustness test, primary literature context, and explicit rival explanations."}]
     },
     {
       "slug": "benchmark-leaked-the-answers",
       "title": "I built a security benchmark and discovered it was leaking the answers",
-      "status": "queued_bounded",
+      "status": "next",
       "kind": "AI evaluation postmortem",
       "priority": 92,
       "zero_cost_path": true,
