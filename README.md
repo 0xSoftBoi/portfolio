@@ -1,32 +1,66 @@
-# Tsolmondorj Natsagdorj — work & proof
+# Tsolmondorj Natsagdorj — selected work
 
-Security & systems engineer (online: **0xSoftBoi**). Cross-chain infrastructure and
-smart-contract security — Rust and the EVM. Every item below links to a **primary source
-you can verify yourself** (a merged PR, a DOI, a public repo).
+Systems & research engineer working on **reliable AI, autonomous systems, and security-critical infrastructure**. This page is deliberately evidence-first: merged upstream code, measured results, public research, and reproducible systems work.
 
-Site: [0xsoftboi.github.io](https://0xsoftboi.github.io) · GitHub: [@0xSoftBoi](https://github.com/0xSoftBoi) · ORCID: [0009-0009-6010-6273](https://orcid.org/0009-0009-6010-6273)
+[GitHub](https://github.com/0xSoftBoi) · [writing](https://0xsoftboi.github.io) · [ORCID 0009-0009-6010-6273](https://orcid.org/0009-0009-6010-6273)
 
-## Merged into upstream projects
+## Upstream contributions
+
+Code accepted by projects I do not control.
+
 | Project | Contribution | Proof |
 |---|---|---|
-| **alloy-rs/core** (the Rust lib behind Foundry & Reth) | EIP-712 self-referential struct canonicalization in `dyn-abi` | [merged PR #1105](https://github.com/alloy-rs/core/pull/1105) |
-| **uutils/coreutils** (Rust rewrite of GNU coreutils) | `date` timezone re-zoning | [merged PR #12327](https://github.com/uutils/coreutils/pull/12327) |
+| **MatGL** | Added reusable MC-dropout uncertainty estimation for pretrained materials models, with batched inference and regression coverage | [merged #801](https://github.com/materialyzeai/matgl/pull/801) |
+| **MatGL** | Made `SoftExponential` autograd-correct and guarded its numerically invalid regions | [merged #809](https://github.com/materialyzeai/matgl/pull/809) |
+| **MLX-LM** | Corrected XTC sampling defaults that could collapse the candidate distribution | [merged #1372](https://github.com/ml-explore/mlx-lm/pull/1372) |
+| **Alloy** | Added EIP-712 canonicalization support for legal self-referential struct types while preserving cycle rejection where required | [merged #1105](https://github.com/alloy-rs/core/pull/1105) |
+| **uutils/coreutils** | Fixed `date` so timezone abbreviations describe input time while output is re-zoned like GNU `date` | [merged #12327](https://github.com/uutils/coreutils/pull/12327) |
+| **uutils/parse_datetime** | Added AM/PM combined parsing | [merged #284](https://github.com/uutils/parse_datetime/pull/284) |
+| **uutils/parse_datetime** | Corrected floor semantics for negative fractional Unix timestamps | [merged #285](https://github.com/uutils/parse_datetime/pull/285) |
+| **uutils/parse_datetime** | Added bare `UT` / `ut` UTC compatibility | [merged #287](https://github.com/uutils/parse_datetime/pull/287) |
 
-## Security
-| Project | What it is | Link |
-|---|---|---|
-| **lock-mint-bridge-lab** | Lock-and-mint bridge audited end-to-end: `supply ≤ collateral` invariant, attestation-gate fix, 512×100 Foundry invariant suite, Ronin/Wormhole/Nomad exploit reproductions | [repo](https://github.com/0xSoftBoi/lock-mint-bridge-lab) |
-| **quantgroup** | Constant-product AMM annotated for auditors: attack simulations, stateful invariants, Wake fuzzing, SWC/CWE mapping | [repo](https://github.com/0xSoftBoi/quantgroup) |
-| **cowswaprouter** | TWAP order splitter for CoW Protocol with a Wake fuzz suite | [repo](https://github.com/0xSoftBoi/cowswaprouter) |
-| **zk-dark-chess** | ZK move-legality over a Poseidon commitment (Circom + Groth16), verified on-chain | [repo](https://github.com/0xSoftBoi/zk-dark-chess) |
-| **fhe-dark-chess** | Fog-of-war chess over an encrypted board (Zama tfhe-rs) | [repo](https://github.com/0xSoftBoi/fhe-dark-chess) |
+## Flagship work
 
-## Research
-| Project | Result | Link |
-|---|---|---|
-| **BRIDGE-bench** | LLM reasoning vs. real cross-chain bridge exploits — static analysis ~0% F1, static-pre-filtered LLM ~40% F1 | [code](https://github.com/0xSoftBoi/anthropic-fellowship) · [DOI 10.5281/zenodo.20604295](https://doi.org/10.5281/zenodo.20604295) |
-| **gnome-materials** | GNoME-style active learning on a pretrained CHGNet potential — 95% top-100 recall at a 20% labeling budget | [repo](https://github.com/0xSoftBoi/gnome-materials) |
+### [roce-preflight](https://github.com/0xSoftBoi/roce-preflight)
 
-## Writing
-Long-form technical write-ups (bridge & DeFi security, on-chain randomness, applied ML,
-systems): [0xsoftboi.github.io/blog](https://0xsoftboi.github.io/blog/)
+RDMA/RoCE diagnostic tooling built around a simple rule: distinguish what was **observed on hardware** from what was inferred or simulated. Real RDMA CI exposed failures that a large unit-test suite did not.
+
+**Signal:** networking · Linux/RDMA · systems diagnostics · hardware-backed validation
+
+### [BRIDGE-bench](https://github.com/0xSoftBoi/anthropic-fellowship)
+
+Evaluation research on whether static analysis and LLM-assisted methods detect compositional cross-chain failures. The project explicitly investigates benchmark leakage and evaluator validity rather than preserving a flattering headline metric.
+
+**Signal:** evaluations · AI security · experimental design · research integrity
+
+### [active-materials-discovery](https://github.com/0xSoftBoi/active-materials-discovery)
+
+Active-learning experiments over pretrained materials models. Includes batched MC-dropout performance work and calibration analysis showing when uncertainty estimates do not provide useful acquisition information. Part of this work became the upstream MatGL uncertainty utility above.
+
+**Signal:** PyTorch · scientific ML · uncertainty · profiling/performance
+
+### [aiur](https://github.com/0xSoftBoi/aiur)
+
+Autonomous airborne-carrier research prototype. The project decomposes a speculative vehicle concept into constrained simulation, docking/recovery control, test tooling, BOMs, and measurable prototype milestones.
+
+**Signal:** autonomy · controls/simulation · robotics · hardware/software systems
+
+## Security-critical systems
+
+### [lock-mint-bridge-lab](https://github.com/0xSoftBoi/lock-mint-bridge-lab)
+
+A lock-and-mint bridge treated as an adversarial systems problem: stateful solvency invariants, static analysis, formal/symbolic checks, and reproductions of historical bridge failure modes.
+
+### Suwappu / Lattice
+
+I build [Suwappu](https://suwappu.bot), with work spanning transaction infrastructure, distributed systems, cryptographic protocols, bridge safety, post-quantum experiments, proof verification, and production reliability. Product work is kept separate here from third-party upstream contributions: the upstream table above is the external-review signal.
+
+## Current upstream work
+
+I also contribute fixes and experiments around Rust ML inference, model serving, numerical correctness, parser/system compatibility, and developer tooling. Open work is intentionally not counted as an accepted upstream contribution until maintainers merge it.
+
+## Engineering thesis
+
+The common thread across these projects is **correctness under hidden failure modes**: abstractions that behave differently on real hardware, benchmarks that measure the wrong thing, numerical methods whose uncertainty is not calibrated, parsers with edge-case semantics, and distributed protocols operating under adversarial conditions.
+
+I prefer reproducible failures, explicit boundaries, measured results, and tests that can falsify the implementation.
