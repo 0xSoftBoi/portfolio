@@ -31,17 +31,23 @@ RDMA/RoCE diagnostic tooling built around a simple rule: distinguish what was **
 
 Evaluation research on whether static analysis and LLM-assisted methods detect compositional cross-chain failures. The project explicitly investigates benchmark leakage and evaluator validity rather than preserving a flattering headline metric.
 
+**Next proof:** the sanitized re-measurement protocol is now locked in [`REMEASUREMENT_PLAN.md`](https://github.com/0xSoftBoi/anthropic-fellowship/blob/master/ai-security/docs/REMEASUREMENT_PLAN.md): same contracts/model/config, with `raw → stripped → anon` paired runs, bootstrap intervals, per-contract deltas, and matched buggy/fixed pairs.
+
 **Signal:** evaluations · AI security · experimental design · research integrity
 
 ### [active-materials-discovery](https://github.com/0xSoftBoi/active-materials-discovery)
 
 Active-learning experiments over pretrained materials models. Includes batched MC-dropout performance work and calibration analysis showing when uncertainty estimates do not provide useful acquisition information. Part of this work became the upstream MatGL uncertainty utility above.
 
+**Measured result:** on `matbench_perovskites`, the pretrained surrogate reaches ~5.15× discovery acceleration over random at a 5% budget, while MC-dropout uncertainty is strongly miscalibrated (`Spearman corr(σ, |error|) = -0.47`) and adds essentially no useful acquisition signal.
+
 **Signal:** PyTorch · scientific ML · uncertainty · profiling/performance
 
 ### [aiur](https://github.com/0xSoftBoi/aiur)
 
 Autonomous airborne-carrier research prototype. The project decomposes a speculative vehicle concept into constrained simulation, docking/recovery control, test tooling, BOMs, and measurable prototype milestones.
+
+**Next proof:** [`P0_EXECUTION_GATE.md`](https://github.com/0xSoftBoi/aiur/blob/main/docs/P0_EXECUTION_GATE.md) defines the physical acceptance test: bench qualification first, then ≥50 integrated recovery attempts, ≥90% capture inside the declared envelope, zero unsafe contacts, two independent sessions, and a committed machine-readable dataset that regenerates the headline plots.
 
 **Signal:** autonomy · controls/simulation · robotics · hardware/software systems
 
@@ -55,9 +61,18 @@ A lock-and-mint bridge treated as an adversarial systems problem: stateful solve
 
 I build [Suwappu](https://suwappu.bot), with work spanning transaction infrastructure, distributed systems, cryptographic protocols, bridge safety, post-quantum experiments, proof verification, and production reliability. Product work is kept separate here from third-party upstream contributions: the upstream table above is the external-review signal.
 
-## Current upstream work
+## Open upstream work
 
-I also contribute fixes and experiments around Rust ML inference, model serving, numerical correctness, parser/system compatibility, and developer tooling. Open work is intentionally not counted as an accepted upstream contribution until maintainers merge it.
+Open work is listed separately and **not counted as accepted upstream evidence until merged**.
+
+| Project | Proposed fix | State |
+|---|---|---|
+| **Hugging Face Candle** | Qwen3-VL causal attention mask should be built for multi-token prefill, not single-token decode | [open #3518](https://github.com/huggingface/candle/pull/3518) |
+| **Polars** | Preserve raw CR line endings when transcoding non-UTF8 CSV files before the Rust reader sees them | [open #27546](https://github.com/pola-rs/polars/pull/27546) |
+| **MLX-LM** | Preserve OpenAI-spec tool-call `arguments` as a JSON string instead of eagerly decoding it | [open #1371](https://github.com/ml-explore/mlx-lm/pull/1371) |
+| **uutils/coreutils** | Preserve literal `..` prefixes in `mktemp` templates instead of losing them to `Path` normalization | [open #12363](https://github.com/uutils/coreutils/pull/12363) |
+
+The goal is depth, not PR count: keep working in ML inference/runtime correctness and Rust/system semantics until these ecosystems show repeated accepted contributions.
 
 ## Engineering thesis
 
