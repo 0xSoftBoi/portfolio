@@ -1,0 +1,47 @@
+name: site-integrity
+
+on:
+  pull_request:
+    paths:
+      - "**/*.html"
+      - "assets/**"
+      - "writing/backlog.json"
+      - "scripts/validate_site.py"
+      - ".github/workflows/site-integrity.yml"
+  push:
+    branches: [main]
+    paths:
+      - "**/*.html"
+      - "assets/**"
+      - "writing/backlog.json"
+      - "scripts/validate_site.py"
+      - ".github/workflows/site-integrity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate local render contract and links
+        run: python scripts/validate_site.py
+      - name: Serve static site and fetch key pages
+        run: |
+          python -m http.server 8080 >/tmp/portfolio-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid' EXIT
+          sleep 1
+          for path in \
+            / \
+            /writing/ \
+            /writing/197-tests-four-hardware-bugs.html \
+            /writing/a-benchmark-can-measure-its-own-metadata.html \
+            /writing/when-uncertainty-makes-active-learning-worse.html \
+            /writing/delete-the-science-fiction-parts-first.html; do
+            curl --fail --silent --show-error "http://127.0.0.1:8080${path}" >/dev/null
+          done
