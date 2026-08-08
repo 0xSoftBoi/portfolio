@@ -1,0 +1,139 @@
+{
+  "name": "research-writing-loop",
+  "version": "1.0",
+  "entry": "backlog",
+  "policies": {
+    "no_paid_experiments": true,
+    "primary_sources_first": true,
+    "negative_results_publishable": true,
+    "blocked_item_blocks_queue": false,
+    "one_article_per_branch": true,
+    "publication_is_revisable": true
+  },
+  "nodes": {
+    "backlog": {
+      "purpose": "Rank all candidate writings by evidence strength, surprise, audience fit and zero-cost finishability.",
+      "success": "At least one eligible non-published item has zero_cost_path=true.",
+      "next": "pick"
+    },
+    "pick": {
+      "purpose": "Choose the highest-priority eligible article.",
+      "success": "Article selected and branch slug defined.",
+      "next": "harvest"
+    },
+    "harvest": {
+      "purpose": "Collect primary source code, result artifacts, CI logs, upstream PRs, papers/specs and contradictory evidence.",
+      "success": "Consequential claims can be mapped to inspectable artifacts.",
+      "gate": "provenance",
+      "pass": "claim_lock",
+      "fail": "recover"
+    },
+    "recover": {
+      "purpose": "Recover from insufficient or inaccessible evidence without spending money.",
+      "options": ["find_zero_cost_primary_evidence", "narrow_claim", "publish_as_design_note", "park"],
+      "pass": "harvest",
+      "narrow": "claim_lock",
+      "park": "park"
+    },
+    "park": {
+      "purpose": "Record the exact unblock condition and immediately return to the queue.",
+      "success": "backlog item has explicit blocker and unblock_condition.",
+      "next": "pick"
+    },
+    "claim_lock": {
+      "purpose": "Lock decision question, one-sentence falsifiable claim, and evidence boundary.",
+      "success": "Claim can be disproved and does not outrun evidence.",
+      "next": "evidence_ledger"
+    },
+    "evidence_ledger": {
+      "purpose": "Classify each hard claim as observed, derived, estimated or target and attach exact provenance.",
+      "success": "All consequential claims have class, source, denominator/units if applicable, and reproduction status.",
+      "next": "quant_gate"
+    },
+    "quant_gate": {
+      "purpose": "Attack denominators, samples, seeds, uncertainty, baselines, subset definitions, stale assumptions and parameter sensitivity.",
+      "pass": "draft",
+      "fail_data": "harvest",
+      "fail_claim": "claim_lock"
+    },
+    "draft": {
+      "purpose": "Write result-first draft using the research template.",
+      "success": "Draft contains result, method, evidence, interpretation, rival, limitations, update condition and reproducibility.",
+      "next": "red_team"
+    },
+    "red_team": {
+      "purpose": "Construct and test the strongest rival explanation.",
+      "attacks": ["selection_bias", "leakage", "proxy_mismatch", "shared_assumption_failure", "parameter_confounding", "evaluator_dependence", "ood_generalization", "survivorship", "alternate_mechanism"],
+      "pass": "robustness",
+      "fail": "claim_lock"
+    },
+    "robustness": {
+      "purpose": "Run zero-cost sensitivity checks and expose unresolved sensitivity when reruns are unavailable.",
+      "success": "Conclusion is stable enough under plausible alternatives or explicitly narrowed.",
+      "next": "visuals"
+    },
+    "visuals": {
+      "purpose": "Create only figures/tables that carry evidence with units, denominator, provenance and uncertainty.",
+      "success": "Every visual has a textual takeaway and provenance.",
+      "next": "repro"
+    },
+    "repro": {
+      "purpose": "Expose exact command/code/data/config/log needed to inspect or recreate results.",
+      "success": "Reproduction artifact is linked or impossibility is explicit.",
+      "next": "citation_gate"
+    },
+    "citation_gate": {
+      "purpose": "Verify every source supports the exact adjacent claim and evidence classes are not blurred.",
+      "pass": "editorial",
+      "fail": "evidence_ledger"
+    },
+    "editorial": {
+      "purpose": "Compress prose and verify headline/dek/conclusion are no stronger than evidence.",
+      "success": "Article reads quickly without hiding uncertainty or boundaries.",
+      "next": "final_gate"
+    },
+    "final_gate": {
+      "purpose": "Require Provenance, Quantitative Validity, Adversarial Thesis, Citation Integrity, Reproducibility and Editorial gates.",
+      "pass": "publish",
+      "fail": "route_failure"
+    },
+    "route_failure": {
+      "purpose": "Route failure to the earliest responsible node instead of patching prose locally.",
+      "routes": {
+        "provenance": "harvest",
+        "quantitative": "quant_gate",
+        "thesis": "claim_lock",
+        "citation": "evidence_ledger",
+        "reproducibility": "repro",
+        "overclaim": "claim_lock",
+        "visual": "visuals"
+      }
+    },
+    "publish": {
+      "purpose": "Merge article, update writing index, source links, version/revision log, and backlog status.",
+      "success": "Published article is discoverable from writing index and traceable to source artifacts.",
+      "next": "propagate"
+    },
+    "propagate": {
+      "purpose": "Update work/profile cross-links only when the article materially improves the public evidence story.",
+      "next": "retrospective"
+    },
+    "retrospective": {
+      "purpose": "Record what the loop caught and strengthen the process if a failure pattern repeats.",
+      "success": "At least one lesson or explicit 'no new process lesson' is recorded.",
+      "next": "pick"
+    },
+    "revision_on_new_evidence": {
+      "purpose": "Reopen a published article when new evidence changes a claim, number or limitation.",
+      "next": "evidence_ledger"
+    }
+  },
+  "gates": {
+    "A_provenance": "Every consequential factual claim traces to primary evidence.",
+    "B_quantitative_validity": "Numbers expose denominator, units, assumptions and uncertainty/sensitivity where material.",
+    "C_adversarial_thesis": "Strongest rival explanation is tested or explicitly unresolved.",
+    "D_citation_integrity": "Sources support exact adjacent claims; observed/derived/estimated/target are distinguished.",
+    "E_reproducibility": "Artifacts are linked or reproduction impossibility is explicit.",
+    "editorial": "Headline, dek and conclusion do not exceed the body."
+  }
+}
